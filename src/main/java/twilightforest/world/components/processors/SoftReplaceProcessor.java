@@ -50,6 +50,6 @@ public final class SoftReplaceProcessor extends StructureProcessor {
 
 	@Override
 	protected StructureProcessorType<?> getType() {
-		return TFStructureProcessors.SOFT_REPLACE.get();
+		return TFStructureProcessors.SOFT_REPLACE.value();
 	}
 }

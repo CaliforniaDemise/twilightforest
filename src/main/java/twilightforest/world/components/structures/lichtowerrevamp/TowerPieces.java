@@ -8,6 +8,7 @@ import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
 import twilightforest.world.components.processors.CobbleVariants;
+import twilightforest.world.components.processors.JigsawProcessor;
 import twilightforest.world.components.processors.StoneBricksVariants;
 
 import java.util.List;
@@ -206,6 +207,7 @@ public final class TowerPieces {
 	}
 
 	public static void addDefaultProcessors(StructurePlaceSettings acceptor) {
+		acceptor.addProcessor(JigsawProcessor.INSTANCE);
 		acceptor.addProcessor(StoneBricksVariants.INSTANCE);
 		acceptor.addProcessor(CobbleVariants.INSTANCE);
 	}
