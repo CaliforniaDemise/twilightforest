@@ -4,9 +4,11 @@ import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
+import twilightforest.world.components.processors.CandelabraProcessor;
 import twilightforest.world.components.processors.CobbleVariants;
 import twilightforest.world.components.processors.JigsawProcessor;
 import twilightforest.world.components.processors.StoneBricksVariants;
@@ -14,6 +16,8 @@ import twilightforest.world.components.processors.StoneBricksVariants;
 import java.util.List;
 
 public final class TowerPieces {
+	public static final StructureProcessor CANDELABRA_MODIFIER = CandelabraProcessor.INSTANCE;
+
 	// FIXME: Move to DataMap of int -> ResourceLocation[] if possible to obtain RegistryAccess
 	private static final ResourceLocation[] thinTowers = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/3x3/lookout_fence"),
@@ -236,10 +240,11 @@ public final class TowerPieces {
 		return array == null ? List.of() : Util.shuffledCopy(array, random);
 	}
 
-	public static void addDefaultProcessors(StructurePlaceSettings acceptor) {
-		acceptor.addProcessor(JigsawProcessor.INSTANCE);
-		acceptor.addProcessor(StoneBricksVariants.INSTANCE);
-		acceptor.addProcessor(CobbleVariants.INSTANCE);
+	public static void addDefaultProcessors(StructurePlaceSettings settings) {
+		settings.addProcessor(JigsawProcessor.INSTANCE)
+			.addProcessor(StoneBricksVariants.INSTANCE)
+			.addProcessor(CobbleVariants.INSTANCE)
+			.addProcessor(CANDELABRA_MODIFIER);
 	}
 
 	private TowerPieces() {

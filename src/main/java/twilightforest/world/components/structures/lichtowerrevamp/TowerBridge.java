@@ -62,19 +62,17 @@ public final class TowerBridge extends TwilightJigsawPiece implements PieceBeard
 	}
 
 	public static void tryRoomAndBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, boolean generateGround, int newDepth) {
-		if (random.nextInt((newDepth >> 2) + 1) == 0) {
-			for (ResourceLocation bridgeId : TowerPieces.bridges(fromCentralTower, random)) {
-				JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent, sourceJigsawPos, sourceOrientation, structureManager, bridgeId, fromCentralTower ? "twilightforest:lich_tower/bridge_center" : "twilightforest:lich_tower/bridge", random);
+		for (ResourceLocation bridgeId : TowerPieces.bridges(fromCentralTower, random)) {
+			JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent, sourceJigsawPos, sourceOrientation, structureManager, bridgeId, fromCentralTower ? "twilightforest:lich_tower/bridge_center" : "twilightforest:lich_tower/bridge", random);
 
-				if (placeableJunction != null) {
-					TowerBridge bridge = new TowerBridge(structureManager, newDepth, placeableJunction, bridgeId, false);
+			if (placeableJunction != null) {
+				TowerBridge bridge = new TowerBridge(structureManager, newDepth, placeableJunction, bridgeId, false);
 
-					if (bridge.tryGenerateRoom(random, pieceAccessor, roomMaxSize, generateGround, fromCentralTower)) {
-						// If the room can be fitted, then also add bridge to list then exit this function
-						pieceAccessor.addPiece(bridge);
-						bridge.addChildren(parent, pieceAccessor, random);
-						return;
-					}
+				if (bridge.tryGenerateRoom(random, pieceAccessor, roomMaxSize, generateGround, fromCentralTower)) {
+					// If the room can be fitted, then also add bridge to list then exit this function
+					pieceAccessor.addPiece(bridge);
+					bridge.addChildren(parent, pieceAccessor, random);
+					return;
 				}
 			}
 		}
