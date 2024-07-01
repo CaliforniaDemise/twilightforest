@@ -22,13 +22,15 @@ import twilightforest.world.components.structures.TwilightJigsawPiece;
 
 public class TowerRoof extends TwilightJigsawPiece implements PieceBeardifierModifier {
 	public TowerRoof(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
-		super(TFStructurePieceTypes.TOWER_ROOF.get(), compoundTag, ctx, readSettings(compoundTag).addProcessor(SoftReplaceProcessor.INSTANCE));
+		super(TFStructurePieceTypes.TOWER_ROOF.get(), compoundTag, ctx, readSettings(compoundTag));
+
+		TowerPieces.addDefaultProcessors(this.placeSettings.addProcessor(SoftReplaceProcessor.INSTANCE));
 	}
 
 	public TowerRoof(int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext) {
 		super(TFStructurePieceTypes.TOWER_ROOF.get(), genDepth, structureManager, templateLocation, jigsawContext);
 
-		this.placeSettings().addProcessor(SoftReplaceProcessor.INSTANCE);
+		TowerPieces.addDefaultProcessors(this.placeSettings.addProcessor(SoftReplaceProcessor.INSTANCE));
 	}
 
 	@Override

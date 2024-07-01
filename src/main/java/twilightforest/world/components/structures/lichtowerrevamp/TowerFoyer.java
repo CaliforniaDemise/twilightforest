@@ -21,10 +21,14 @@ import twilightforest.world.components.structures.TwilightJigsawPiece;
 public final class TowerFoyer extends TwilightJigsawPiece implements PieceBeardifierModifier {
 	public TowerFoyer(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.TOWER_FOYER.get(), compoundTag, ctx, readSettings(compoundTag));
+
+		TowerPieces.addDefaultProcessors(this.placeSettings);
 	}
 
 	public TowerFoyer(StructureTemplateManager structureManager, BlockPos startPosition, Rotation rotation) {
 		super(TFStructurePieceTypes.TOWER_FOYER.get(), 0, structureManager, TwilightForestMod.prefix("lich_tower/tower_foyer"), makeSettings(rotation), startPosition.below());
+
+		TowerPieces.addDefaultProcessors(this.placeSettings);
 	}
 
 	@Override

@@ -20,10 +20,14 @@ import twilightforest.world.components.structures.TwilightJigsawPiece;
 public final class CentralTowerBase extends TwilightJigsawPiece implements PieceBeardifierModifier {
 	public CentralTowerBase(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.CENTRAL_TOWER_BASE.get(), compoundTag, ctx, readSettings(compoundTag));
+
+		TowerPieces.addDefaultProcessors(this.placeSettings);
 	}
 
 	public CentralTowerBase(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext) {
 		super(TFStructurePieceTypes.CENTRAL_TOWER_BASE.get(), 1, structureManager, TwilightForestMod.prefix("lich_tower/tower_base"), jigsawContext);
+
+		TowerPieces.addDefaultProcessors(this.placeSettings);
 	}
 
 	@Override

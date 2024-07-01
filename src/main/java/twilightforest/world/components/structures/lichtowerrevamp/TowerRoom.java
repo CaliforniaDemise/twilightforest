@@ -28,12 +28,16 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 	public TowerRoom(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.TOWER_ROOM.get(), compoundTag, ctx, readSettings(compoundTag));
 
+		TowerPieces.addDefaultProcessors(this.placeSettings);
+
 		this.roomSize = compoundTag.getInt("room_size");
 		this.generateGround = compoundTag.getBoolean("gen_ground");
 	}
 
 	public TowerRoom(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, ResourceLocation roomId, int roomSize, boolean generateGround) {
 		super(TFStructurePieceTypes.TOWER_ROOM.get(), genDepth, structureManager, roomId, jigsawContext);
+
+		TowerPieces.addDefaultProcessors(this.placeSettings);
 
 		this.roomSize = roomSize;
 		this.generateGround = generateGround;

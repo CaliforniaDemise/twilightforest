@@ -3,9 +3,12 @@ package twilightforest.world.components.structures.lichtowerrevamp;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
+import twilightforest.world.components.processors.CobbleVariants;
+import twilightforest.world.components.processors.StoneBricksVariants;
 
 import java.util.List;
 
@@ -200,6 +203,11 @@ public final class TowerPieces {
 
 	public static <T> List<T> safeShuffledCopy(@Nullable T[] array, RandomSource random) {
 		return array == null ? List.of() : Util.shuffledCopy(array, random);
+	}
+
+	public static void addDefaultProcessors(StructurePlaceSettings acceptor) {
+		acceptor.addProcessor(StoneBricksVariants.INSTANCE);
+		acceptor.addProcessor(CobbleVariants.INSTANCE);
 	}
 
 	private TowerPieces() {

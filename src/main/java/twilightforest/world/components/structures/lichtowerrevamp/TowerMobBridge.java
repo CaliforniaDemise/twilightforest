@@ -20,10 +20,14 @@ import twilightforest.world.components.structures.TwilightJigsawPiece;
 public class TowerMobBridge extends TwilightJigsawPiece implements PieceBeardifierModifier {
 	public TowerMobBridge(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.MOB_BRIDGE.get(), compoundTag, ctx, readSettings(compoundTag));
+
+		TowerPieces.addDefaultProcessors(this.placeSettings);
 	}
 
 	public TowerMobBridge(int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext) {
 		super(TFStructurePieceTypes.MOB_BRIDGE.get(), genDepth, structureManager, templateLocation, jigsawContext);
+
+		TowerPieces.addDefaultProcessors(this.placeSettings);
 	}
 
 	@Override
