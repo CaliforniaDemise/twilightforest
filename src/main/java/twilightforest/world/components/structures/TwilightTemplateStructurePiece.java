@@ -7,8 +7,10 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.properties.StructureMode;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
@@ -16,6 +18,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import twilightforest.util.ArrayUtil;
 import twilightforest.util.BoundingBoxUtils;
@@ -93,6 +96,29 @@ public abstract class TwilightTemplateStructurePiece extends TemplateStructurePi
 		return makeSettings(Rotation.getRandom(random));
 	}
 
+	// VANILLACOPY: Same as the supercall except without the dumb jigsaw code
+	@Override
+	public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGen, RandomSource random, BoundingBox chunkBounds, ChunkPos chunkPos, BlockPos structureBottomCenter) {
+		this.placeSettings.setBoundingBox(chunkBounds);
+		this.boundingBox = this.template.getBoundingBox(this.placeSettings, this.templatePosition);
+		if (this.template.placeInWorld(level, this.templatePosition, structureBottomCenter, this.placeSettings, random, 2)) {
+			for (StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo : this.template
+				.filterBlocks(this.templatePosition, this.placeSettings, Blocks.STRUCTURE_BLOCK)) {
+				if (structuretemplate$structureblockinfo.nbt() != null) {
+					StructureMode structuremode = StructureMode.valueOf(structuretemplate$structureblockinfo.nbt().getString("mode"));
+					if (structuremode == StructureMode.DATA) {
+						this.handleDataMarker(
+							structuretemplate$structureblockinfo.nbt().getString("metadata"),
+							structuretemplate$structureblockinfo.pos(),
+							level,
+							random,
+							chunkBounds
+						);
+					}
+				}
+			}
+		}
+	}
 
 	// Worse case scenario if the terrain still isn't being risen for the Lich Tower,
 	// then we'll need to do via this. I still have other solutions I'd like to explore first
