@@ -44,7 +44,7 @@ public final class JigsawProcessor extends StructureProcessor {
 				TwilightForestMod.LOGGER.error("Error while parsing blockstate {} in jigsaw block @ {}", replaceWith, modifiedInfo.pos());
 			}
 
-			return new StructureTemplate.StructureBlockInfo(modifiedInfo.pos(), blockstate.mirror(placeSettings.getMirror()).rotate(placeSettings.getRotation()), null);
+			return new StructureTemplate.StructureBlockInfo(modifiedInfo.pos(), blockstate, null);
 		}
 
 		return modifiedInfo;
