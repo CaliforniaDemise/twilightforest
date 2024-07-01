@@ -6,11 +6,19 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
@@ -91,12 +99,26 @@ public abstract class TwilightJigsawPiece extends TwilightTemplateStructurePiece
 	public void addChildren(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random) {
 		super.addChildren(parent, pieceAccessor, random);
 
-		for (JigsawRecord record : this.spareJigsaws) {
-			this.processJigsaw(parent, pieceAccessor, random, record);
+		List<JigsawRecord> jigsaws = this.spareJigsaws;
+		for (int i = 0; i < jigsaws.size(); i++) {
+			this.processJigsaw(parent, pieceAccessor, random, jigsaws.get(i), i);
 		}
 	}
 
-	protected abstract void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection);
+	protected abstract void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int jigsawIndex);
+
+	@Override
+	public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGen, RandomSource random, BoundingBox chunkBounds, ChunkPos chunkPos, BlockPos structureCenterPos) {
+		super.postProcess(level, structureManager, chunkGen, random, chunkBounds, chunkPos, structureCenterPos);
+
+		ChunkAccess chunkAt = level.getChunk(chunkPos.getWorldPosition());
+		for (StructureTemplate.StructureBlockInfo blockInfo : this.template.filterBlocks(this.templatePosition, this.placeSettings, Blocks.JIGSAW)) {
+			BlockPos infoPos = blockInfo.pos();
+			if (chunkBounds.isInside(infoPos)) {
+				chunkAt.markPosForPostprocessing(infoPos);
+			}
+		}
+	}
 
 	@Nullable
 	public JigsawRecord getSourceJigsaw() {

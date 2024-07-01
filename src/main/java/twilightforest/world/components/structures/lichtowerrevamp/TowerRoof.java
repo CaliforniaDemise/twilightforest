@@ -49,7 +49,7 @@ public class TowerRoof extends TwilightJigsawPiece implements PieceBeardifierMod
 	}
 
 	@Override
-	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection) {
+	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int jigsawIndex) {
 	}
 
 	@Override

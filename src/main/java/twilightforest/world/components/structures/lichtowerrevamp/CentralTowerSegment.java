@@ -56,7 +56,7 @@ public final class CentralTowerSegment extends TwilightJigsawPiece implements Pi
 	}
 
 	@Override
-	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection) {
+	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int jigsawIndex) {
 		switch (connection.target()) {
 			case "twilightforest:lich_tower/tower_below" -> {
 				if (this.genDepth < random.nextInt(4) + 6) {

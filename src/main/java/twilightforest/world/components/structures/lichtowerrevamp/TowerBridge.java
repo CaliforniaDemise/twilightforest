@@ -39,7 +39,7 @@ public final class TowerBridge extends TwilightJigsawPiece implements PieceBeard
 	}
 
 	@Override
-	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord record) {
+	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord record, int jigsawIndex) {
 	}
 
 	@Override

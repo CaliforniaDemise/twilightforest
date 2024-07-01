@@ -31,7 +31,7 @@ public final class CentralTowerBase extends TwilightJigsawPiece implements Piece
 	}
 
 	@Override
-	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection) {
+	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int jigsawIndex) {
 		if ("twilightforest:lich_tower/tower_below".equals(connection.target())) {
 			CentralTowerSegment.putTowerSegment(pieceAccessor, random, connection.pos(), connection.orientation(), this, this.structureManager, true);
 		} else if ("twilightforest:lich_tower/bridge".equals(connection.target())) {
