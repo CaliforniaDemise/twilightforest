@@ -31,6 +31,11 @@ public final class JigsawProcessor extends StructureProcessor {
 		CompoundTag nbtInfo = modifiedInfo.nbt();
 		if (nbtInfo != null && modifiedInfo.state().is(Blocks.JIGSAW)) {
 			String replaceWith = nbtInfo.getString("final_state");
+
+			if ("empty".equals(replaceWith)) {
+				return null;
+			}
+
 			BlockState blockstate = Blocks.AIR.defaultBlockState();
 
 			try {
@@ -39,7 +44,7 @@ public final class JigsawProcessor extends StructureProcessor {
 				TwilightForestMod.LOGGER.error("Error while parsing blockstate {} in jigsaw block @ {}", replaceWith, modifiedInfo.pos());
 			}
 
-			return new StructureTemplate.StructureBlockInfo(modifiedInfo.pos(), blockstate, null);
+			return new StructureTemplate.StructureBlockInfo(modifiedInfo.pos(), blockstate.mirror(placeSettings.getMirror()).rotate(placeSettings.getRotation()), null);
 		}
 
 		return modifiedInfo;
