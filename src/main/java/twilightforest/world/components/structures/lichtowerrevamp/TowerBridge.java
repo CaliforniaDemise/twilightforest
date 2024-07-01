@@ -20,12 +20,18 @@ import twilightforest.util.jigsaw.JigsawRecord;
 import twilightforest.world.components.structures.TwilightJigsawPiece;
 
 public final class TowerBridge extends TwilightJigsawPiece implements PieceBeardifierModifier {
+	private final boolean generateGround;
+
 	public TowerBridge(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.TOWER_BRIDGE.get(), compoundTag, ctx, readSettings(compoundTag));
+
+		this.generateGround = compoundTag.getBoolean("gen_ground");
 	}
 
-	public TowerBridge(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, ResourceLocation templateLocation) {
+	public TowerBridge(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, ResourceLocation templateLocation, boolean generateGround) {
 		super(TFStructurePieceTypes.TOWER_BRIDGE.get(), genDepth, structureManager, templateLocation, jigsawContext);
+
+		this.generateGround = generateGround; // Only true for bridge entryway covers on the ground
 	}
 
 	@Override
@@ -43,23 +49,24 @@ public final class TowerBridge extends TwilightJigsawPiece implements PieceBeard
 
 	@Override
 	public TerrainAdjustment getTerrainAdjustment() {
-		return TerrainAdjustment.NONE;
+		return this.generateGround ? TerrainAdjustment.BEARD_THIN : TerrainAdjustment.NONE;
 	}
 
 	@Override
 	public int getGroundLevelDelta() {
-		return 0;
+		return 1;
 	}
 
-	public static void putBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, int depth, boolean canPutGround) {
-		if (random.nextInt(4) == 0) {
+	public static void tryRoomAndBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, boolean generateGround, int newDepth) {
+		if (random.nextInt((newDepth >> 2) + 1) == 0) {
 			for (ResourceLocation bridgeId : TowerPieces.bridges(fromCentralTower, random)) {
 				JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent, sourceJigsawPos, sourceOrientation, structureManager, bridgeId, fromCentralTower ? "twilightforest:lich_tower/bridge_center" : "twilightforest:lich_tower/bridge", random);
 
 				if (placeableJunction != null) {
-					TowerBridge bridge = new TowerBridge(structureManager, depth + 1, placeableJunction, bridgeId);
+					TowerBridge bridge = new TowerBridge(structureManager, newDepth, placeableJunction, bridgeId, false);
 
-					if (bridge.tryGenerateRoom(random, pieceAccessor, roomMaxSize, canPutGround)) {
+					if (bridge.tryGenerateRoom(random, pieceAccessor, roomMaxSize, generateGround, fromCentralTower)) {
+						// If the room can be fitted, then also add bridge to list then exit this function
 						pieceAccessor.addPiece(bridge);
 						bridge.addChildren(parent, pieceAccessor, random);
 						return;
@@ -76,16 +83,17 @@ public final class TowerBridge extends TwilightJigsawPiece implements PieceBeard
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent, sourceJigsawPos, sourceOrientation, structureManager, bridgeCoverLocation, "twilightforest:lich_tower/bridge", random);
 
 		if (placeableJunction != null) {
-			StructurePiece bridgeCoverPiece = new TowerBridge(structureManager, depth + 1, placeableJunction, bridgeCoverLocation);
+			StructurePiece bridgeCoverPiece = new TowerBridge(structureManager, newDepth, placeableJunction, bridgeCoverLocation, generateGround);
 			pieceAccessor.addPiece(bridgeCoverPiece);
 			bridgeCoverPiece.addChildren(parent, pieceAccessor, random);
 		}
 	}
 
-	public boolean tryGenerateRoom(final RandomSource random, final StructurePieceAccessor structureStart, final int roomMaxSize, boolean canPutGround) {
+	public boolean tryGenerateRoom(final RandomSource random, final StructurePieceAccessor structureStart, final int roomMaxSize, boolean generateGround, boolean fromCentralTower) {
+		int minSize = fromCentralTower ? 1 : 0;
 		for (JigsawRecord generatingPoint : this.getSpareJigsaws()) {
-			for (int roomSize = Math.max(0, roomMaxSize - 1); roomSize >= 0; roomSize--) {
-				boolean result = this.tryPlaceRoom(random, structureStart, TowerPieces.getARoom(random, roomSize), generatingPoint, roomSize, canPutGround);
+			for (int roomSize = Math.max(0, roomMaxSize - 1); roomSize >= minSize; roomSize--) {
+				boolean result = this.tryPlaceRoom(random, structureStart, TowerPieces.getARoom(random, roomSize), generatingPoint, roomSize, generateGround);
 
 				if (result) {
 					return true;
@@ -104,7 +112,7 @@ public final class TowerBridge extends TwilightJigsawPiece implements PieceBeard
 				return false;
 			}
 
-			boolean generateGround = canPutGround && roomSize > 0 && placeableJunction.templatePos().subtract(connection.pos()).getY() < 7;
+			boolean generateGround = canPutGround && placeableJunction.templatePos().subtract(connection.pos()).getY() < 6;
 
 			StructurePiece room = new TowerRoom(this.structureManager, this.genDepth + 1, placeableJunction, roomId, roomSize, generateGround);
 

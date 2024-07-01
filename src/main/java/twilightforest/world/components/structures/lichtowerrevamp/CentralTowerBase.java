@@ -31,7 +31,7 @@ public final class CentralTowerBase extends TwilightJigsawPiece implements Piece
 		if ("twilightforest:lich_tower/tower_below".equals(connection.target())) {
 			CentralTowerSegment.putTowerSegment(pieceAccessor, random, connection.pos(), connection.orientation(), this, this.structureManager, true);
 		} else if ("twilightforest:lich_tower/bridge".equals(connection.target())) {
-			TowerBridge.putBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, true, 4, this.getGenDepth() + 1, true);
+			TowerBridge.tryRoomAndBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, true, 4, true, this.genDepth + 1);
 		}
 	}
 

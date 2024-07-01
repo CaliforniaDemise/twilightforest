@@ -54,7 +54,7 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 				if (this.genDepth > 30 || this.roomSize < 1)
 					break;
 
-				TowerBridge.putBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, false, this.roomSize - random.nextInt(2) - (random.nextInt(this.genDepth) >> 1), this.getGenDepth() + 1, this.generateGround);
+				TowerBridge.tryRoomAndBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, false, this.roomSize - random.nextInt(2) - (random.nextInt(this.genDepth) >> 1), this.generateGround, this.getGenDepth() + 1 + 1);
 			}
 			case "twilightforest:lich_tower/roof" -> {
 				JigsawRecord sourceJigsaw = this.getSourceJigsaw();
@@ -63,24 +63,34 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 				FrontAndTop orientationToMatch = FrontAndTop.fromFrontAndTop(Direction.UP, sourceDirection.getOpposite());
 				BoundingBox roofExtension = BoundingBoxUtils.extrusionFrom(this.boundingBox.minX(), this.boundingBox.maxY() + 1, this.boundingBox.minZ(), this.boundingBox.maxX(), this.boundingBox.maxY() + 1, this.boundingBox.maxZ(), sourceDirection, 1);
 				StructurePiece collidingPiece = pieceAccessor.findCollisionPiece(roofExtension);
-				boolean sideRoofsOnly = collidingPiece != null;
+				boolean doSideAttachment = collidingPiece != null;
 
-				for (ResourceLocation roofLocation : TowerPieces.roofs(random, this.roomSize, sideRoofsOnly)) {
-					JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(this, connection.pos(), orientationToMatch, this.structureManager, roofLocation, "twilightforest:lich_tower/roof", random);
-
-					if (placeableJunction != null) {
-						TowerRoof roofPiece = new TowerRoof(this.genDepth + 1, this.structureManager, roofLocation, placeableJunction);
-
-						if (pieceAccessor.findCollisionPiece(roofPiece.generationCollisionBox()) == null) {
-							pieceAccessor.addPiece(roofPiece);
-							roofPiece.addChildren(this, pieceAccessor, random);
-
-							break;
-						}
+				for (ResourceLocation roofLocation : TowerPieces.roofs(random, this.roomSize, doSideAttachment)) {
+					if (this.tryRoof(pieceAccessor, random, connection, roofLocation, orientationToMatch, false)) {
+						return;
 					}
 				}
+
+				ResourceLocation fallbackRoof = TowerPieces.getFallbackRoof(this.roomSize, doSideAttachment);
+				this.tryRoof(pieceAccessor, random, connection, fallbackRoof, orientationToMatch, true);
 			}
 		}
+	}
+
+	private boolean tryRoof(StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, ResourceLocation roofLocation, FrontAndTop orientationToMatch, boolean allowClipping) {
+		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(this, connection.pos(), orientationToMatch, this.structureManager, roofLocation, "twilightforest:lich_tower/roof", random);
+
+		if (placeableJunction != null) {
+			TowerRoof roofPiece = new TowerRoof(this.genDepth + 1, this.structureManager, roofLocation, placeableJunction);
+
+			if (allowClipping || pieceAccessor.findCollisionPiece(roofPiece.generationCollisionBox()) == null) {
+				pieceAccessor.addPiece(roofPiece);
+				roofPiece.addChildren(this, pieceAccessor, random);
+
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -99,6 +109,6 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 
 	@Override
 	public int getGroundLevelDelta() {
-		return 0;
+		return this.roomSize == 0 ? 2 : 1;
 	}
 }

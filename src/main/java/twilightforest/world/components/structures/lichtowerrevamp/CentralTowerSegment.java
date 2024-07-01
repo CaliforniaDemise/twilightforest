@@ -68,9 +68,7 @@ public final class CentralTowerSegment extends TwilightJigsawPiece implements Pi
 				}
 			}
 			case "twilightforest:lich_tower/bridge" -> {
-				if (random.nextInt(this.genDepth * 2) == 0) {
-					TowerBridge.putBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, true, 4 - random.nextInt(2) - (random.nextInt(this.genDepth) >> 1) - (this.genDepth >> 2), this.getGenDepth() + 1, false);
-				}
+				TowerBridge.tryRoomAndBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, true, 4 - random.nextInt(2) - (random.nextInt(this.genDepth) >> 1) - (this.genDepth >> 2), false, this.genDepth + 1 + 1);
 			}
 			case "twilightforest:mob_bridge" -> {
 				if (this.putMobBridge) {
