@@ -24,19 +24,49 @@ public final class TowerPieces {
 		TwilightForestMod.prefix("lich_tower/5x5/elbow_junction"),
 		TwilightForestMod.prefix("lich_tower/5x5/full_junction"),
 		TwilightForestMod.prefix("lich_tower/5x5/straight_junction"),
-		TwilightForestMod.prefix("lich_tower/5x5/t_junction")
+		TwilightForestMod.prefix("lich_tower/5x5/t_junction"),
+		TwilightForestMod.prefix("lich_tower/5x5/altar"),
+		TwilightForestMod.prefix("lich_tower/5x5/desk"),
+		TwilightForestMod.prefix("lich_tower/5x5/full_junction_1"),
+		TwilightForestMod.prefix("lich_tower/5x5/full_junction_2"),
+		TwilightForestMod.prefix("lich_tower/5x5/full_junction_3"),
+		TwilightForestMod.prefix("lich_tower/5x5/ladder"),
+		TwilightForestMod.prefix("lich_tower/5x5/library"),
+		TwilightForestMod.prefix("lich_tower/5x5/lone_chest"),
+		TwilightForestMod.prefix("lich_tower/5x5/spawner_1"),
+		TwilightForestMod.prefix("lich_tower/5x5/spawner_2"),
+		TwilightForestMod.prefix("lich_tower/5x5/spawner_3"),
+		TwilightForestMod.prefix("lich_tower/5x5/spawner_4"),
+		TwilightForestMod.prefix("lich_tower/5x5/spawner_5"),
+		TwilightForestMod.prefix("lich_tower/5x5/webbed_spawner")
 	};
 	private static final ResourceLocation[] rooms7 = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/7x7/elbow_junction"),
 		TwilightForestMod.prefix("lich_tower/7x7/full_junction"),
 		TwilightForestMod.prefix("lich_tower/7x7/straight_junction"),
-		TwilightForestMod.prefix("lich_tower/7x7/t_junction")
+		TwilightForestMod.prefix("lich_tower/7x7/t_junction"),
+		TwilightForestMod.prefix("lich_tower/7x7/altars"),
+		TwilightForestMod.prefix("lich_tower/7x7/book_staircases"),
+		TwilightForestMod.prefix("lich_tower/7x7/cactus"),
+		TwilightForestMod.prefix("lich_tower/7x7/desk"),
+		TwilightForestMod.prefix("lich_tower/7x7/full_junction_1"),
+		TwilightForestMod.prefix("lich_tower/7x7/full_junction_2"),
+		TwilightForestMod.prefix("lich_tower/7x7/grave"),
+		TwilightForestMod.prefix("lich_tower/7x7/library_hall"),
+		TwilightForestMod.prefix("lich_tower/7x7/nursery"),
+		TwilightForestMod.prefix("lich_tower/7x7/potion"),
+		TwilightForestMod.prefix("lich_tower/7x7/ritual"),
+		TwilightForestMod.prefix("lich_tower/7x7/tiered_library")
 	};
 	private static final ResourceLocation[] rooms9 = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/9x9/elbow_junction"),
 		TwilightForestMod.prefix("lich_tower/9x9/full_junction"),
 		TwilightForestMod.prefix("lich_tower/9x9/straight_junction"),
-		TwilightForestMod.prefix("lich_tower/9x9/t_junction")
+		TwilightForestMod.prefix("lich_tower/9x9/t_junction"),
+		TwilightForestMod.prefix("lich_tower/9x9/archives"),
+		TwilightForestMod.prefix("lich_tower/9x9/enchanting_prison"),
+		TwilightForestMod.prefix("lich_tower/9x9/keepsake_casket"),
+		TwilightForestMod.prefix("lich_tower/9x9/tiered_library")
 	};
 
 	// TODO: more bridges?
