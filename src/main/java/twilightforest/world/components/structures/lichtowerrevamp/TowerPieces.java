@@ -1,6 +1,7 @@
 package twilightforest.world.components.structures.lichtowerrevamp;
 
 import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -245,6 +246,10 @@ public final class TowerPieces {
 			.addProcessor(StoneBricksVariants.INSTANCE)
 			.addProcessor(CobbleVariants.INSTANCE)
 			.addProcessor(CANDELABRA_MODIFIER);
+	}
+
+	public static boolean shouldPutGroundUnder(BlockPos lowerSourcePos, BlockPos upperConnectionPos, int threshold) {
+		return upperConnectionPos.subtract(lowerSourcePos).getY() < threshold;
 	}
 
 	private TowerPieces() {

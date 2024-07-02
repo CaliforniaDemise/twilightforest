@@ -81,6 +81,10 @@ public final class TowerBridge extends TwilightJigsawPiece implements PieceBeard
 
 		if (fromCentralTower) return; // Don't generate covers from the central tower
 
+		putCover(parent, pieceAccessor, random, sourceJigsawPos, sourceOrientation, structureManager, generateGround, newDepth);
+	}
+
+	public static void putCover(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, boolean generateGround, int newDepth) {
 		ResourceLocation bridgeCoverLocation = TowerPieces.rollCover(random);
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent, sourceJigsawPos, sourceOrientation, structureManager, bridgeCoverLocation, "twilightforest:lich_tower/bridge", random);
 
@@ -114,7 +118,7 @@ public final class TowerBridge extends TwilightJigsawPiece implements PieceBeard
 				return false;
 			}
 
-			boolean generateGround = canPutGround && placeableJunction.templatePos().subtract(connection.pos()).getY() < 6;
+			boolean generateGround = canPutGround && TowerPieces.shouldPutGroundUnder(connection.pos(), placeableJunction.templatePos(), 6);
 
 			StructurePiece room = new TowerRoom(this.structureManager, this.genDepth + 1, placeableJunction, roomId, roomSize, generateGround);
 
