@@ -29,6 +29,11 @@ public final class ArrayUtil {
 		}
 	}
 
+	@Nullable
+	public static <T> T randomOrNull(T@Nullable[] array, RandomSource random) {
+		return array == null || array.length == 0 ? null : Util.getRandom(array, random);
+	}
+
 	public static <T> List<T> safeShuffledCopy(T@Nullable[] array, RandomSource random) {
 		return array == null ? List.of() : Util.shuffledCopy(array, random);
 	}

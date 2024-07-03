@@ -24,13 +24,13 @@ public class TowerRoof extends TwilightJigsawPiece implements PieceBeardifierMod
 	public TowerRoof(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.TOWER_ROOF.get(), compoundTag, ctx, readSettings(compoundTag));
 
-		TowerPieces.addDefaultProcessors(this.placeSettings.addProcessor(SoftReplaceProcessor.INSTANCE));
+		TowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(SoftReplaceProcessor.INSTANCE));
 	}
 
 	public TowerRoof(int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext) {
 		super(TFStructurePieceTypes.TOWER_ROOF.get(), genDepth, structureManager, templateLocation, jigsawContext);
 
-		TowerPieces.addDefaultProcessors(this.placeSettings.addProcessor(SoftReplaceProcessor.INSTANCE));
+		TowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(SoftReplaceProcessor.INSTANCE));
 	}
 
 	@Override

@@ -25,7 +25,7 @@ public final class CentralTowerSegment extends TwilightJigsawPiece implements Pi
 	public CentralTowerSegment(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.CENTRAL_TOWER.get(), compoundTag, ctx, readSettings(compoundTag));
 
-		TowerPieces.addDefaultProcessors(this.placeSettings);
+		TowerUtil.addDefaultProcessors(this.placeSettings);
 
 		this.putMobBridge = compoundTag.getBoolean("put_bridge");
 	}
@@ -33,7 +33,7 @@ public final class CentralTowerSegment extends TwilightJigsawPiece implements Pi
 	public CentralTowerSegment(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, boolean putMobBridge) {
 		super(TFStructurePieceTypes.CENTRAL_TOWER.get(), genDepth, structureManager, TwilightForestMod.prefix("lich_tower/tower_slice"), jigsawContext);
 
-		TowerPieces.addDefaultProcessors(this.placeSettings);
+		TowerUtil.addDefaultProcessors(this.placeSettings);
 
 		this.putMobBridge = putMobBridge;
 	}
@@ -76,7 +76,7 @@ public final class CentralTowerSegment extends TwilightJigsawPiece implements Pi
 			}
 			case "twilightforest:mob_bridge" -> {
 				if (this.putMobBridge) {
-					ResourceLocation mobBridgeLocation = TowerPieces.rollMobBridge(random);
+					ResourceLocation mobBridgeLocation = TowerUtil.rollRandomMobBridge(random);
 					JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(this, connection.pos(), connection.orientation(), this.structureManager, mobBridgeLocation, "twilightforest:mob_bridge", random);
 
 					if (placeableJunction != null) {
