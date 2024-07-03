@@ -14,6 +14,8 @@ import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.BoundingBoxUtils;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
@@ -28,7 +30,7 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 	public TowerRoom(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.TOWER_ROOM.get(), compoundTag, ctx, readSettings(compoundTag));
 
-		TowerPieces.addDefaultProcessors(this.placeSettings);
+		TowerPieces.addDefaultProcessors(this.placeSettings.addProcessor(TowerPieces.ROOM_SPAWNERS));
 
 		this.roomSize = compoundTag.getInt("room_size");
 		this.generateGround = compoundTag.getBoolean("gen_ground");
@@ -37,7 +39,7 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 	public TowerRoom(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, ResourceLocation roomId, int roomSize, boolean generateGround) {
 		super(TFStructurePieceTypes.TOWER_ROOM.get(), genDepth, structureManager, roomId, jigsawContext);
 
-		TowerPieces.addDefaultProcessors(this.placeSettings);
+		TowerPieces.addDefaultProcessors(this.placeSettings.addProcessor(TowerPieces.ROOM_SPAWNERS));
 
 		this.roomSize = roomSize;
 		this.generateGround = generateGround;
@@ -55,7 +57,7 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int jigsawIndex) {
 		switch (connection.target()) {
 			case "twilightforest:lich_tower/bridge" -> {
-				boolean generateGround = this.generateGround && TowerPieces.shouldPutGroundUnder(this.templatePosition, connection.pos(), 4);
+				boolean generateGround = this.generateGround && connection.pos().getY() < 5;
 				if (this.genDepth > 30 || this.roomSize < 1 || random.nextInt(jigsawIndex + 1) > 1) {
 					TowerBridge.putCover(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, generateGround, this.genDepth + 1);
 				} else {
@@ -63,13 +65,9 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 				}
 			}
 			case "twilightforest:lich_tower/roof" -> {
-				JigsawRecord sourceJigsaw = this.getSourceJigsaw();
-				Direction sourceDirection = JigsawUtil.getAbsoluteHorizontal(sourceJigsaw != null ? sourceJigsaw.orientation() : connection.orientation());
-
-				FrontAndTop orientationToMatch = FrontAndTop.fromFrontAndTop(Direction.UP, sourceDirection.getOpposite());
-				BoundingBox roofExtension = BoundingBoxUtils.extrusionFrom(this.boundingBox.minX(), this.boundingBox.maxY() + 1, this.boundingBox.minZ(), this.boundingBox.maxX(), this.boundingBox.maxY() + 1, this.boundingBox.maxZ(), sourceDirection, 1);
-				StructurePiece collidingPiece = pieceAccessor.findCollisionPiece(roofExtension);
-				boolean doSideAttachment = collidingPiece != null;
+				FrontAndTop orientationToMatch = this.getVerticalOrientation(connection, Direction.UP);
+				BoundingBox roofExtension = BoundingBoxUtils.extrusionFrom(this.boundingBox.minX(), this.boundingBox.maxY() + 1, this.boundingBox.minZ(), this.boundingBox.maxX(), this.boundingBox.maxY() + 1, this.boundingBox.maxZ(), orientationToMatch.top().getOpposite(), 1);
+				boolean doSideAttachment = pieceAccessor.findCollisionPiece(roofExtension) != null;
 
 				for (ResourceLocation roofLocation : TowerPieces.roofs(random, this.roomSize, doSideAttachment)) {
 					if (this.tryRoof(pieceAccessor, random, connection, roofLocation, orientationToMatch, false)) {
@@ -80,10 +78,34 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 				ResourceLocation fallbackRoof = TowerPieces.getFallbackRoof(this.roomSize, doSideAttachment);
 				this.tryRoof(pieceAccessor, random, connection, fallbackRoof, orientationToMatch, true);
 			}
+			case "twilightforest:lich_tower/beard" -> {
+				if (this.generateGround) {
+					// Instead of placing a beard structure piece, this piece generates ground with the Beardifier!
+					return;
+				}
+
+				FrontAndTop orientationToMatch = this.getVerticalOrientation(connection, Direction.DOWN);
+
+				for (ResourceLocation beardLocation : TowerPieces.beards(random, this.roomSize)) {
+					if (this.tryBeard(pieceAccessor, random, connection, beardLocation, orientationToMatch, false)) {
+						return;
+					}
+				}
+
+				ResourceLocation fallbackBeard = TowerPieces.getFallbackBeard(this.roomSize);
+				this.tryBeard(pieceAccessor, random, connection, fallbackBeard, orientationToMatch, true);
+			}
 		}
 	}
 
-	private boolean tryRoof(StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, ResourceLocation roofLocation, FrontAndTop orientationToMatch, boolean allowClipping) {
+	private @NotNull FrontAndTop getVerticalOrientation(JigsawRecord connection, Direction vertical) {
+		JigsawRecord sourceJigsaw = this.getSourceJigsaw();
+		Direction sourceDirection = JigsawUtil.getAbsoluteHorizontal(sourceJigsaw != null ? sourceJigsaw.orientation() : connection.orientation());
+
+		return FrontAndTop.fromFrontAndTop(vertical, sourceDirection.getOpposite());
+	}
+
+	private boolean tryRoof(StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, @Nullable ResourceLocation roofLocation, FrontAndTop orientationToMatch, boolean allowClipping) {
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(this, connection.pos(), orientationToMatch, this.structureManager, roofLocation, "twilightforest:lich_tower/roof", random);
 
 		if (placeableJunction != null) {
@@ -92,6 +114,22 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 			if (allowClipping || pieceAccessor.findCollisionPiece(roofPiece.generationCollisionBox()) == null) {
 				pieceAccessor.addPiece(roofPiece);
 				roofPiece.addChildren(this, pieceAccessor, random);
+
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean tryBeard(StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, @Nullable ResourceLocation beardLocation, FrontAndTop orientationToMatch, boolean allowClipping) {
+		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(this, connection.pos(), orientationToMatch, this.structureManager, beardLocation, "twilightforest:lich_tower/beard", random);
+
+		if (placeableJunction != null) {
+			TowerBeard beardPiece = new TowerBeard(this.genDepth + 1, this.structureManager, beardLocation, placeableJunction);
+
+			if (allowClipping || pieceAccessor.findCollisionPiece(beardPiece.generationCollisionBox()) == null) {
+				pieceAccessor.addPiece(beardPiece);
+				beardPiece.addChildren(this, pieceAccessor, random);
 
 				return true;
 			}

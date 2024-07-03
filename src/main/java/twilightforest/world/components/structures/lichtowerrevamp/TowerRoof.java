@@ -57,7 +57,7 @@ public class TowerRoof extends TwilightJigsawPiece implements PieceBeardifierMod
 	}
 
 	public BoundingBox generationCollisionBox() {
-		if (Math.min(this.boundingBox.getYSpan(), Math.min(this.boundingBox.getXSpan(), this.boundingBox.getZSpan())) < 2) {
+		if (this.boundingBox.getXSpan() < 2 || this.boundingBox.getYSpan() < 2 || this.boundingBox.getZSpan() < 2) {
 			return BoundingBoxUtils.safeRetract(this.boundingBox, Direction.DOWN, 1);
 		}
 

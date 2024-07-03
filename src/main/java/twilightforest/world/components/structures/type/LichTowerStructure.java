@@ -37,7 +37,7 @@ public class LichTowerStructure extends ControlledSpawningStructure {
 
 	@Override
 	protected @Nullable StructurePiece getFirstPiece(GenerationContext context, RandomSource random, ChunkPos chunkPos, int x, int y, int z) {
-		return new TowerFoyer(context.structureTemplateManager(), new BlockPos(x, y + 1, z), Rotation.getRandom(random));
+		return new TowerFoyer(context.structureTemplateManager(), new BlockPos(x, y, z), Rotation.getRandom(random));
 	}
 
 	@Override

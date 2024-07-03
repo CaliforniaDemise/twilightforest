@@ -1,23 +1,36 @@
 package twilightforest.world.components.structures.lichtowerrevamp;
 
+import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import net.minecraft.Util;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.neoforged.neoforge.common.util.ConcatenatedListView;
 import org.jetbrains.annotations.Nullable;
 import twilightforest.TwilightForestMod;
-import twilightforest.world.components.processors.CandelabraProcessor;
-import twilightforest.world.components.processors.CobbleVariants;
-import twilightforest.world.components.processors.JigsawProcessor;
-import twilightforest.world.components.processors.StoneBricksVariants;
-
-import java.util.List;
+import twilightforest.init.TFEntities;
+import twilightforest.util.ArrayUtil;
+import twilightforest.world.components.processors.*;
 
 public final class TowerPieces {
 	public static final StructureProcessor CANDELABRA_MODIFIER = CandelabraProcessor.INSTANCE;
+	public static final StructureProcessor ROOM_SPAWNERS = SpawnerProcessor.compile(1, Object2IntMaps.unmodifiable(Util.make(new Object2IntArrayMap<>(), map -> {
+		// 1/3 chance for any spider variant, 1/3 chance for skeleton, 1/3 chance for zombie
+		map.put(EntityType.SPIDER, 1);
+		map.put(EntityType.CAVE_SPIDER, 1);
+		map.put(TFEntities.SWARM_SPIDER.get(), 1);
+		map.put(TFEntities.HEDGE_SPIDER.get(), 1);
+		map.put(EntityType.SKELETON, 4);
+		map.put(EntityType.ZOMBIE, 4);
+	})));
+	public static final StructureProcessor CENTRAL_SPAWNERS = SpawnerProcessor.compile(1, Object2IntMaps.unmodifiable(Util.make(new Object2IntArrayMap<>(), map -> {
+		map.put(EntityType.SKELETON, 2);
+		map.put(EntityType.ZOMBIE, 1);
+		map.put(TFEntities.SWARM_SPIDER.get(), 1);
+	})));
 
 	// FIXME: Move to DataMap of int -> ResourceLocation[] if possible to obtain RegistryAccess
 	private static final ResourceLocation[] thinTowers = new ResourceLocation[] {
@@ -78,8 +91,8 @@ public final class TowerPieces {
 	private static final ResourceLocation[] centerBridges = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/central_bridge")
 	};
+	public static final ResourceLocation DIRECT_ATTACHMENT = TwilightForestMod.prefix("lich_tower/no_bridge");
 	private static final ResourceLocation[] bridges = new ResourceLocation[] {
-		TwilightForestMod.prefix("lich_tower/no_bridge"),
 		TwilightForestMod.prefix("lich_tower/room_bridge_5"),
 		TwilightForestMod.prefix("lich_tower/room_bridge_3")
 	};
@@ -127,6 +140,11 @@ public final class TowerPieces {
 		TwilightForestMod.prefix("lich_tower/5x5/fence_roof"),
 		TwilightForestMod.prefix("lich_tower/5x5/slabs_side_roof")
 	};
+	private static final ResourceLocation[] BEARDS_5 = new ResourceLocation[] {
+		TwilightForestMod.prefix("lich_tower/5x5/beard_fancy"),
+		TwilightForestMod.prefix("lich_tower/5x5/beard_fangs"),
+		TwilightForestMod.prefix("lich_tower/5x5/beard_plain")
+	};
 
 	private static final ResourceLocation[] roofs7 = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/7x7/pyramid_roof"),
@@ -142,6 +160,11 @@ public final class TowerPieces {
 		TwilightForestMod.prefix("lich_tower/7x7/fence_roof"),
 		TwilightForestMod.prefix("lich_tower/7x7/slabs_side_roof")
 	};
+	private static final ResourceLocation[] BEARDS_7 = new ResourceLocation[] {
+		TwilightForestMod.prefix("lich_tower/7x7/beard_fancy"),
+		TwilightForestMod.prefix("lich_tower/7x7/beard_fangs"),
+		TwilightForestMod.prefix("lich_tower/7x7/beard_plain")
+	};
 
 	private static final ResourceLocation[] roofs9 = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/9x9/pyramid_roof"),
@@ -156,6 +179,35 @@ public final class TowerPieces {
 		TwilightForestMod.prefix("lich_tower/9x9/curved_side_roof"),
 		TwilightForestMod.prefix("lich_tower/9x9/fence_roof"),
 		TwilightForestMod.prefix("lich_tower/9x9/slabs_side_roof")
+	};
+	private static final ResourceLocation[] BEARDS_9 = new ResourceLocation[] {
+		TwilightForestMod.prefix("lich_tower/9x9/beard_fancy"),
+		TwilightForestMod.prefix("lich_tower/9x9/beard_fangs"),
+		TwilightForestMod.prefix("lich_tower/9x9/beard_plain")
+	};
+
+	private static final ResourceLocation[][] BEARDS = new ResourceLocation[][] {
+		BEARDS_5,
+		BEARDS_7,
+		BEARDS_9
+	};
+
+	private static final ResourceLocation[] FLAT_SIDE_ROOFS = new ResourceLocation[] {
+		TwilightForestMod.prefix("lich_tower/3x3/flat_side_roof"),
+		TwilightForestMod.prefix("lich_tower/5x5/flat_side_roof"),
+		TwilightForestMod.prefix("lich_tower/7x7/flat_side_roof"),
+		TwilightForestMod.prefix("lich_tower/9x9/flat_side_roof")
+	};
+	private static final ResourceLocation[] FLAT_ROOFS = new ResourceLocation[] {
+		TwilightForestMod.prefix("lich_tower/3x3/flat_roof"),
+		TwilightForestMod.prefix("lich_tower/5x5/flat_roof"),
+		TwilightForestMod.prefix("lich_tower/7x7/flat_roof"),
+		TwilightForestMod.prefix("lich_tower/9x9/flat_roof")
+	};
+	private static final ResourceLocation[] FLAT_BEARDS = new ResourceLocation[] {
+		TwilightForestMod.prefix("lich_tower/5x5/beard_flat"),
+		TwilightForestMod.prefix("lich_tower/7x7/beard_flat"),
+		TwilightForestMod.prefix("lich_tower/9x9/beard_flat")
 	};
 
 	public static Iterable<ResourceLocation> bridges(boolean fromCentralTower, RandomSource randomSource) {
@@ -197,7 +249,7 @@ public final class TowerPieces {
 				default -> null;
 			};
 
-			return safeShuffledCopy(roofList, randomSource);
+			return ArrayUtil.safeShuffledCopy(roofList, randomSource);
 		}
 
 		@Nullable ResourceLocation[] tallRoofList = switch(size) {
@@ -216,29 +268,25 @@ public final class TowerPieces {
 			default -> null;
 		};
 
-		return ConcatenatedListView.of(safeShuffledCopy(tallRoofList, randomSource), safeShuffledCopy(roofList, randomSource));
+		return ConcatenatedListView.of(ArrayUtil.safeShuffledCopy(tallRoofList, randomSource), ArrayUtil.safeShuffledCopy(roofList, randomSource));
 	}
 
+	public static Iterable<ResourceLocation> beards(RandomSource randomSource, int size) {
+		return ArrayUtil.safeShuffledCopy(ArrayUtil.orNull(BEARDS, size - 1), randomSource);
+	}
+
+	@Nullable
 	public static ResourceLocation getFallbackRoof(int size, boolean sideAttachment) {
 		if (sideAttachment) {
-			return switch (size) {
-				case 3 -> TwilightForestMod.prefix("lich_tower/9x9/flat_side_roof");
-				case 2 -> TwilightForestMod.prefix("lich_tower/7x7/flat_side_roof");
-				case 1 -> TwilightForestMod.prefix("lich_tower/5x5/flat_side_roof");
-				default -> TwilightForestMod.prefix("lich_tower/3x3/flat_side_roof");
-			};
+			return ArrayUtil.orNull(FLAT_SIDE_ROOFS, size);
 		} else {
-			return switch (size) {
-				case 3 -> TwilightForestMod.prefix("lich_tower/9x9/flat_roof");
-				case 2 -> TwilightForestMod.prefix("lich_tower/7x7/flat_roof");
-				case 1 -> TwilightForestMod.prefix("lich_tower/5x5/flat_roof");
-				default -> TwilightForestMod.prefix("lich_tower/3x3/flat_roof");
-			};
+			return ArrayUtil.orNull(FLAT_ROOFS, size);
 		}
 	}
 
-	public static <T> List<T> safeShuffledCopy(@Nullable T[] array, RandomSource random) {
-		return array == null ? List.of() : Util.shuffledCopy(array, random);
+	@Nullable
+	public static ResourceLocation getFallbackBeard(int size) {
+		return ArrayUtil.orNull(FLAT_BEARDS, size - 1);
 	}
 
 	public static void addDefaultProcessors(StructurePlaceSettings settings) {
@@ -246,10 +294,6 @@ public final class TowerPieces {
 			.addProcessor(StoneBricksVariants.INSTANCE)
 			.addProcessor(CobbleVariants.INSTANCE)
 			.addProcessor(CANDELABRA_MODIFIER);
-	}
-
-	public static boolean shouldPutGroundUnder(BlockPos lowerSourcePos, BlockPos upperConnectionPos, int threshold) {
-		return upperConnectionPos.subtract(lowerSourcePos).getY() < threshold;
 	}
 
 	private TowerPieces() {

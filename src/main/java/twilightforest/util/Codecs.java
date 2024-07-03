@@ -10,16 +10,13 @@ import it.unimi.dsi.fastutil.doubles.Double2ObjectSortedMap;
 import it.unimi.dsi.fastutil.floats.Float2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.floats.Float2ObjectSortedMap;
 import net.minecraft.Util;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Vec3i;
+import net.minecraft.core.*;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.saveddata.maps.MapId;
 
 import java.util.Arrays;
 import java.util.List;
@@ -83,6 +80,10 @@ public final class Codecs {
 		} catch (Throwable e) {
 			return DataResult.error(e::getMessage);
 		}
+	}
+
+	public static <T> Codec<T> fromRegistry(Registry<T> registry) {
+		return ResourceLocation.CODEC.xmap(registry::get, registry::getKey);
 	}
 
 	public static <E> DataResult<Pair<E, E>> arrayToPair(List<E> list) {

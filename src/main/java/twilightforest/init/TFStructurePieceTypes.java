@@ -92,6 +92,7 @@ public class TFStructurePieceTypes {
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> MOB_BRIDGE = registerPieceType("TFLT" + "MobBridge", TowerMobBridge::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TOWER_BRIDGE = registerPieceType("TFLT" + "Bridge", TowerBridge::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TOWER_ROOF = registerPieceType("TFLT" + "TRoof", TowerRoof::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> TOWER_BEARD = registerPieceType("TFLT" + "TBeard", TowerBeard::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TOWER_ROOM = registerPieceType("TFLT" + "TRoom", TowerRoom::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TOWER_BOSS_ROOM = registerPieceType("TFLT" + "TBoss", BossRoom::new);
 

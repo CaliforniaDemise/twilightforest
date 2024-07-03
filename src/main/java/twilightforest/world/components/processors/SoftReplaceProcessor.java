@@ -3,10 +3,7 @@ package twilightforest.world.components.processors;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.FenceBlock;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
@@ -45,7 +42,7 @@ public final class SoftReplaceProcessor extends StructureProcessor {
 	private boolean isFullBlock(BlockState state) {
 		// the BlockState#isSolid() is not reliable in checking for a full block
 		Block block = state.getBlock();
-		return !(block instanceof FenceBlock || block instanceof SlabBlock || block instanceof StairBlock);
+		return !(block instanceof FenceBlock || block instanceof WallBlock || block instanceof SlabBlock || block instanceof StairBlock);
 	}
 
 	@Override

@@ -62,26 +62,41 @@ public final class TowerBridge extends TwilightJigsawPiece implements PieceBeard
 	}
 
 	public static void tryRoomAndBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, boolean generateGround, int newDepth) {
-		for (ResourceLocation bridgeId : TowerPieces.bridges(fromCentralTower, random)) {
-			JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent, sourceJigsawPos, sourceOrientation, structureManager, bridgeId, fromCentralTower ? "twilightforest:lich_tower/bridge_center" : "twilightforest:lich_tower/bridge", random);
-
-			if (placeableJunction != null) {
-				TowerBridge bridge = new TowerBridge(structureManager, newDepth, placeableJunction, bridgeId, false);
-
-				if (bridge.tryGenerateRoom(random, pieceAccessor, roomMaxSize, generateGround, fromCentralTower)) {
-					// If the room can be fitted, then also add bridge to list then exit this function
-					pieceAccessor.addPiece(bridge);
-					bridge.addChildren(parent, pieceAccessor, random);
+		boolean shouldGenerateGround = generateGround && sourceJigsawPos.getY() < 6;
+		if (fromCentralTower || random.nextInt((newDepth >> 1) + 1) > roomMaxSize + 2) {
+			for (ResourceLocation bridgeId : TowerPieces.bridges(fromCentralTower, random)) {
+				if (tryBridge(parent, pieceAccessor, random, sourceJigsawPos, sourceOrientation, structureManager, fromCentralTower, roomMaxSize, shouldGenerateGround, newDepth, bridgeId, fromCentralTower)) {
 					return;
 				}
 			}
 		}
 
 		// This here is reached only if a room was not successfully generated - now a wall must be placed to cover where the bridge would have been
+		if (fromCentralTower) {
+			return; // Don't generate covers nor direct side-tower attachments from the central tower
+		}
 
-		if (fromCentralTower) return; // Don't generate covers from the central tower
+		if (tryBridge(parent, pieceAccessor, random, sourceJigsawPos, sourceOrientation, structureManager, false, roomMaxSize, shouldGenerateGround, newDepth, TowerPieces.DIRECT_ATTACHMENT, true)) {
+			return;
+		}
 
-		putCover(parent, pieceAccessor, random, sourceJigsawPos, sourceOrientation, structureManager, generateGround, newDepth);
+		putCover(parent, pieceAccessor, random, sourceJigsawPos, sourceOrientation, structureManager, shouldGenerateGround, newDepth);
+	}
+
+	private static boolean tryBridge(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, boolean fromCentralTower, int roomMaxSize, boolean generateGround, int newDepth, ResourceLocation bridgeId, boolean allowClipping) {
+		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent, sourceJigsawPos, sourceOrientation, structureManager, bridgeId, fromCentralTower ? "twilightforest:lich_tower/bridge_center" : "twilightforest:lich_tower/bridge", random);
+
+		if (placeableJunction != null) {
+			TowerBridge bridge = new TowerBridge(structureManager, newDepth, placeableJunction, bridgeId, false);
+
+			if ((allowClipping || pieceAccessor.findCollisionPiece(bridge.boundingBox) == null) && bridge.tryGenerateRoom(random, pieceAccessor, roomMaxSize, generateGround, fromCentralTower)) {
+				// If the bridge & room can be fitted, then also add bridge to list then exit this function
+				pieceAccessor.addPiece(bridge);
+				bridge.addChildren(parent, pieceAccessor, random);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static void putCover(TwilightJigsawPiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, StructureTemplateManager structureManager, boolean generateGround, int newDepth) {
@@ -118,7 +133,7 @@ public final class TowerBridge extends TwilightJigsawPiece implements PieceBeard
 				return false;
 			}
 
-			boolean generateGround = canPutGround && TowerPieces.shouldPutGroundUnder(connection.pos(), placeableJunction.templatePos(), 6);
+			boolean generateGround = canPutGround && connection.pos().getY() < 4;
 
 			StructurePiece room = new TowerRoom(this.structureManager, this.genDepth + 1, placeableJunction, roomId, roomSize, generateGround);
 
