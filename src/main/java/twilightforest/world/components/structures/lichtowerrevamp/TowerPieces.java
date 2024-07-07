@@ -31,8 +31,6 @@ public final class TowerPieces {
 
 	static final ResourceLocation[][] ROOMS = new ResourceLocation[][] {
 		new ResourceLocation[] {
-			TwilightForestMod.prefix("lich_tower/3x3/lookout_fence"),
-			TwilightForestMod.prefix("lich_tower/3x3/lookout_glass"),
 			TwilightForestMod.prefix("lich_tower/3x3/lookout_tinted")
 		},
 		new ResourceLocation[] {

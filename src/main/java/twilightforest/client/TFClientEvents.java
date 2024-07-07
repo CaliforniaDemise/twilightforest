@@ -50,6 +50,7 @@ import twilightforest.block.GiantBlock;
 import twilightforest.block.MiniatureStructureBlock;
 import twilightforest.block.entity.GrowingBeanstalkBlockEntity;
 import twilightforest.client.model.block.aurorablock.NoiseVaryingModelLoader;
+import twilightforest.client.model.block.carpet.RoyalRagsModelBuilder;
 import twilightforest.client.model.block.doors.CastleDoorModelLoader;
 import twilightforest.client.model.block.forcefield.ForceFieldModelLoader;
 import twilightforest.client.model.block.giantblock.GiantBlockModelLoader;
@@ -82,6 +83,7 @@ public class TFClientEvents {
 			event.register(TwilightForestMod.prefix("force_field"), ForceFieldModelLoader.INSTANCE);
 			event.register(TwilightForestMod.prefix("castle_door"), CastleDoorModelLoader.INSTANCE);
 			event.register(TwilightForestMod.prefix("noise_varying"), NoiseVaryingModelLoader.INSTANCE);
+			event.register(TwilightForestMod.prefix("lofty_carpet"), RoyalRagsModelBuilder.INSTANCE);
 		}
 
 		@SubscribeEvent

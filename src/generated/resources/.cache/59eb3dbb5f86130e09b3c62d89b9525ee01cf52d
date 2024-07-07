@@ -1,4 +1,4 @@
-// 1.21	2024-07-05T23:11:43.013309	Loot Tables
+// 1.21	2024-07-07T01:55:55.485145	Loot Tables
 483a7e0c99d5cabeab1ba9f04bd8e88d0a8f7386 data/twilightforest/loot_table/aurora_cache.json
 002a6e2eccdc92db019bd775911912877b26771f data/twilightforest/loot_table/aurora_room.json
 6b7c07d237e56f84d11d308552cd943af7a906e5 data/twilightforest/loot_table/basement.json
@@ -295,6 +295,7 @@ d4cf2ba1c9d5ad6b35a2ef1b173496f27a7c789f data/twilightforest/loot_table/blocks/r
 fff8c14cea64f079189a2e6eeb2bc54526fe0a3c data/twilightforest/loot_table/blocks/root.json
 3da3a7d3562c3de3385b5ecb893f671cc1186457 data/twilightforest/loot_table/blocks/root_strand.json
 fb7868a21fc15bb2227693e0604831ce049a0772 data/twilightforest/loot_table/blocks/rope.json
+848072b43cc9627270fd4259d33a5087da86e931 data/twilightforest/loot_table/blocks/royal_rags.json
 ef904a158987dbd9963909ef8fb80667071025b7 data/twilightforest/loot_table/blocks/skeleton_skull_candle.json
 ae6d7a73102bfb46c3fe678debd0a35187e9125f data/twilightforest/loot_table/blocks/skeleton_wall_skull_candle.json
 b7336d3399cc73483a2b33de9185b17f64d19c1d data/twilightforest/loot_table/blocks/smoker.json

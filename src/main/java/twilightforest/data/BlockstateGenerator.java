@@ -10,7 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import net.neoforged.neoforge.client.model.generators.*;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.client.model.generators.loaders.CompositeModelBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -18,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.*;
 import twilightforest.client.model.block.aurorablock.NoiseVaryingModelBuilder;
+import twilightforest.client.model.block.carpet.RoyalRagsBuilder;
 import twilightforest.client.model.block.doors.CastleDoorBuilder;
 import twilightforest.client.model.block.forcefield.ForceFieldModel;
 import twilightforest.client.model.block.forcefield.ForceFieldModelBuilder;
@@ -413,6 +417,8 @@ public class BlockstateGenerator extends BlockModelBuilders {
 			.part().modelFile(models().getExistingFile(prefix("wrought_iron_fence_middle"))).rotationY(270).addModel().condition(WroughtIronFenceBlock.WEST_FENCE, WroughtIronFenceBlock.FenceSide.MIDDLE).end()
 			.part().modelFile(models().getExistingFile(prefix("wrought_iron_fence_bottom"))).rotationY(270).addModel().condition(WroughtIronFenceBlock.WEST_FENCE, WroughtIronFenceBlock.FenceSide.BOTTOM).end();
 
+		registerLoftyCarpet();
+
 		registerWoodBlocks();
 		registerNagastone();
 		registerForceFields();
@@ -490,6 +496,15 @@ public class BlockstateGenerator extends BlockModelBuilders {
 		candelabra();
 
 		this.terrorcotta();
+	}
+
+	private void registerLoftyCarpet() {
+		ResourceLocation loftyCarpetTexture = TFBlocks.ROYAL_RAGS.getId().withPrefix("block/");
+		ResourceLocation loftyCarpetCTM = loftyCarpetTexture.withSuffix("_ctm");
+		simpleBlock(TFBlocks.ROYAL_RAGS.value(), this.models().carpet(TFBlocks.ROYAL_RAGS.getRegisteredName(), loftyCarpetTexture)
+			.texture("wool_ctm", loftyCarpetCTM)
+			.customLoader(RoyalRagsBuilder::begin)
+			.end());
 	}
 
 	private void registerForceFields() {
