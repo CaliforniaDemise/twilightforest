@@ -6,9 +6,11 @@ import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.init.TFBlocks;
 import twilightforest.init.TFEntities;
 import twilightforest.util.ArrayUtil;
 import twilightforest.world.components.processors.*;
@@ -29,6 +31,7 @@ public final class TowerUtil {
 		map.put(EntityType.ZOMBIE, 1);
 		map.put(TFEntities.SWARM_SPIDER.get(), 1);
 	})));
+	public static final StructureProcessor UPDATE_MARKER = UpdateMarkingProcessor.forBlocks(Blocks.STONE_BRICK_WALL, Blocks.MOSSY_STONE_BRICK_WALL, TFBlocks.WROUGHT_IRON_FENCE.value());
 
 	@Nullable
 	public static ResourceLocation rollRandomRoom(RandomSource randomSource, int size) {
@@ -69,7 +72,8 @@ public final class TowerUtil {
 		settings.addProcessor(JigsawProcessor.INSTANCE)
 			.addProcessor(StoneBricksVariants.INSTANCE)
 			.addProcessor(CobbleVariants.INSTANCE)
-			.addProcessor(CANDELABRA_MODIFIER);
+			.addProcessor(CANDELABRA_MODIFIER)
+			.addProcessor(UPDATE_MARKER);
 	}
 
 	private TowerUtil() {

@@ -38,6 +38,7 @@ public class TFStructureProcessors {
 
 	public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<JigsawProcessor>> JIGSAW_PROCESSOR = registerProcessor("jigsaw_processor", () -> () -> JigsawProcessor.CODEC);
 	public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<SpawnerProcessor>> SPAWNER_PROCESSOR = registerProcessor("spawner_processor", () -> () -> SpawnerProcessor.CODEC);
+	public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<UpdateMarkingProcessor>> UPDATE_MARKING_PROCESSOR = registerProcessor("update_marking", () -> () -> UpdateMarkingProcessor.CODEC);
 
 	//goofy but needed
 	public static <P extends StructureProcessor> DeferredHolder<StructureProcessorType<?>, StructureProcessorType<P>> registerProcessor(String name, Supplier<StructureProcessorType<P>> processor) {
