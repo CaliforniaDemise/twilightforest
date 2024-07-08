@@ -21,21 +21,20 @@ public final class CentralTowerBase extends TwilightJigsawPiece implements Piece
 	public CentralTowerBase(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.CENTRAL_TOWER_BASE.get(), compoundTag, ctx, readSettings(compoundTag));
 
-		TowerUtil.addDefaultProcessors(this.placeSettings);
+		TowerUtil.addDefaultProcessors(this.placeSettings, true);
 	}
 
 	public CentralTowerBase(StructureTemplateManager structureManager, JigsawPlaceContext jigsawContext) {
 		super(TFStructurePieceTypes.CENTRAL_TOWER_BASE.get(), 1, structureManager, TwilightForestMod.prefix("lich_tower/tower_base"), jigsawContext);
 
-		TowerUtil.addDefaultProcessors(this.placeSettings);
+		TowerUtil.addDefaultProcessors(this.placeSettings, true);
 	}
 
 	@Override
 	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int jigsawIndex) {
-		if ("twilightforest:lich_tower/tower_below".equals(connection.target())) {
-			CentralTowerSegment.putTowerSegment(pieceAccessor, random, connection.pos(), connection.orientation(), this, this.structureManager, true);
-		} else if ("twilightforest:lich_tower/bridge".equals(connection.target())) {
-			TowerBridge.tryRoomAndBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, true, 4, true, this.genDepth + 1);
+		switch (connection.target()) {
+			case "twilightforest:lich_tower/tower_below" -> CentralTowerSegment.putTowerSegment(pieceAccessor, random, connection.pos(), connection.orientation(), this, this.structureManager, true);
+			case "twilightforest:lich_tower/bridge" -> TowerBridge.tryRoomAndBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, true, 4, true, this.genDepth + 1);
 		}
 	}
 

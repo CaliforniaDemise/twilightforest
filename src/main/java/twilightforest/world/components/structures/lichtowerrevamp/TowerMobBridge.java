@@ -21,13 +21,13 @@ public class TowerMobBridge extends TwilightJigsawPiece implements PieceBeardifi
 	public TowerMobBridge(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.MOB_BRIDGE.get(), compoundTag, ctx, readSettings(compoundTag));
 
-		TowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(TowerUtil.CENTRAL_SPAWNERS));
+		TowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(TowerUtil.CENTRAL_SPAWNERS), true);
 	}
 
 	public TowerMobBridge(int genDepth, StructureTemplateManager structureManager, ResourceLocation templateLocation, JigsawPlaceContext jigsawContext) {
 		super(TFStructurePieceTypes.MOB_BRIDGE.get(), genDepth, structureManager, templateLocation, jigsawContext);
 
-		TowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(TowerUtil.CENTRAL_SPAWNERS));
+		TowerUtil.addDefaultProcessors(this.placeSettings.addProcessor(TowerUtil.CENTRAL_SPAWNERS), true);
 	}
 
 	@Override

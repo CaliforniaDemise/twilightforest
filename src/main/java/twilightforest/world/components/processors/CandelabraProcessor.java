@@ -16,14 +16,21 @@ import twilightforest.init.TFBlocks;
 
 @Deprecated // Band-aid processor
 public class CandelabraProcessor extends StructureProcessor {
-	public static final CandelabraProcessor INSTANCE = new CandelabraProcessor();
-	public static final MapCodec<CandelabraProcessor> CODEC = MapCodec.unit(INSTANCE);
+	public static final CandelabraProcessor INSTANCE = new CandelabraProcessor(false);
+	public static final CandelabraProcessor INSTANCE_DIM = new CandelabraProcessor(true);
+	public static final MapCodec<CandelabraProcessor> CODEC = MapCodec.unit(INSTANCE_DIM);
+
+	private final LightableBlock.Lighting lighting;
+
+	private CandelabraProcessor(boolean dim) {
+		this.lighting = dim ? LightableBlock.Lighting.DIM : LightableBlock.Lighting.NORMAL;
+	}
 
 	@Nullable
 	@Override
 	public StructureTemplate.StructureBlockInfo process(LevelReader level, BlockPos offset, BlockPos piecePos, StructureTemplate.StructureBlockInfo originalInfo, StructureTemplate.StructureBlockInfo modifiedInfo, StructurePlaceSettings placeSettings, @Nullable StructureTemplate template) {
 		if (modifiedInfo.state().is(TFBlocks.CANDELABRA)) {
-			BlockState newState = modifiedInfo.state().setValue(CandelabraBlock.LIGHTING, LightableBlock.Lighting.DIM);
+			BlockState newState = modifiedInfo.state().setValue(CandelabraBlock.LIGHTING, this.lighting);
 
 			// FIXME Fix blockstate <-> blockentity parity for candles, for data resiliency
 			for (BooleanProperty prop : CandelabraBlock.CANDLES) {

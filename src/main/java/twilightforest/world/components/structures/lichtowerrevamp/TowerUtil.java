@@ -16,7 +16,6 @@ import twilightforest.util.ArrayUtil;
 import twilightforest.world.components.processors.*;
 
 public final class TowerUtil {
-	public static final StructureProcessor CANDELABRA_MODIFIER = CandelabraProcessor.INSTANCE;
 	public static final StructureProcessor ROOM_SPAWNERS = SpawnerProcessor.compile(1, Object2IntMaps.unmodifiable(Util.make(new Object2IntArrayMap<>(), map -> {
 		// 1/3 chance for any spider variant, 1/3 chance for skeleton, 1/3 chance for zombie
 		map.put(EntityType.SPIDER, 1);
@@ -68,11 +67,11 @@ public final class TowerUtil {
 		return ArrayUtil.orNull(TowerPieces.FLAT_BEARDS, size - 1);
 	}
 
-	public static void addDefaultProcessors(StructurePlaceSettings settings) {
+	public static void addDefaultProcessors(StructurePlaceSettings settings, boolean dim) {
 		settings.addProcessor(JigsawProcessor.INSTANCE)
 			.addProcessor(StoneBricksVariants.INSTANCE)
 			.addProcessor(CobbleVariants.INSTANCE)
-			.addProcessor(CANDELABRA_MODIFIER)
+			.addProcessor(dim ? CandelabraProcessor.INSTANCE_DIM : CandelabraProcessor.INSTANCE)
 			.addProcessor(UPDATE_MARKER);
 	}
 
