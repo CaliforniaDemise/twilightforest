@@ -79,7 +79,8 @@ public final class TowerPieces {
 			TwilightForestMod.prefix("lich_tower/9x9/archives"),
 			TwilightForestMod.prefix("lich_tower/9x9/enchanting_prison"),
 			TwilightForestMod.prefix("lich_tower/9x9/keepsake_casket"),
-			TwilightForestMod.prefix("lich_tower/9x9/tiered_library")
+			TwilightForestMod.prefix("lich_tower/9x9/tiered_library"),
+			TwilightForestMod.prefix("lich_tower/9x9/mossy_junction")
 		}
 	};
 
