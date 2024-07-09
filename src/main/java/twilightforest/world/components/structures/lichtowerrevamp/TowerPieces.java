@@ -83,6 +83,10 @@ public final class TowerPieces {
 			TwilightForestMod.prefix("lich_tower/9x9/mossy_junction")
 		}
 	};
+	static final ResourceLocation[] MAGIC_GALLERIES = new ResourceLocation[] {
+		TwilightForestMod.prefix("lich_tower/magic_painting_gaia"),
+		TwilightForestMod.prefix("lich_tower/magic_painting_voidscape")
+	};
 
 	static final ResourceLocation[][] ROOFS = new ResourceLocation[][] {
 		new ResourceLocation[] {

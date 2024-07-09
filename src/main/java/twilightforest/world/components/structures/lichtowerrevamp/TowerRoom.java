@@ -58,10 +58,12 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 		switch (connection.target()) {
 			case "twilightforest:lich_tower/bridge" -> {
 				boolean generateGround = this.generateGround && connection.pos().getY() < 5;
-				if (this.genDepth > 30 || this.roomSize < 1 || random.nextInt(jigsawIndex + 1) > 1) {
+				if (this.roomSize < 1) {
+					return;
+				} else if (this.genDepth > 30 || random.nextInt(jigsawIndex + 1) > 1) {
 					TowerBridge.putCover(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, generateGround, this.genDepth + 1);
 				} else {
-					TowerBridge.tryRoomAndBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, false, this.roomSize - random.nextInt(2) - (random.nextInt(this.genDepth) >> 1), generateGround, this.genDepth + 1);
+					TowerBridge.tryRoomAndBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, false, this.roomSize - random.nextInt(2) - (random.nextInt(this.genDepth) >> 1), generateGround, this.genDepth + 1, false);
 				}
 			}
 			case "twilightforest:lich_tower/roof" -> {

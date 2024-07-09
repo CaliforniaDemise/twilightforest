@@ -37,6 +37,11 @@ public final class TowerUtil {
 		return ArrayUtil.randomOrNull(ArrayUtil.orNull(TowerPieces.ROOMS, size), randomSource);
 	}
 
+	@Nullable
+	public static ResourceLocation rollMagicGallery(RandomSource randomSource) {
+		return ArrayUtil.randomOrNull(TowerPieces.MAGIC_GALLERIES, randomSource);
+	}
+
 	public static ResourceLocation rollRandomMobBridge(RandomSource randomSource) {
 		return Util.getRandom(TowerPieces.MOB_BRIDGES, randomSource);
 	}

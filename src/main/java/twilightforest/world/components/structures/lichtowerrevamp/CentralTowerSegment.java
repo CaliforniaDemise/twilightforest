@@ -21,6 +21,7 @@ import twilightforest.world.components.structures.TwilightJigsawPiece;
 
 public final class CentralTowerSegment extends TwilightJigsawPiece implements PieceBeardifierModifier {
 	private final boolean putMobBridge;
+	private final boolean continueAbove;
 
 	public CentralTowerSegment(StructurePieceSerializationContext ctx, CompoundTag compoundTag) {
 		super(TFStructurePieceTypes.CENTRAL_TOWER.get(), compoundTag, ctx, readSettings(compoundTag));
@@ -28,14 +29,16 @@ public final class CentralTowerSegment extends TwilightJigsawPiece implements Pi
 		TowerUtil.addDefaultProcessors(this.placeSettings, true);
 
 		this.putMobBridge = compoundTag.getBoolean("put_bridge");
+		this.continueAbove = compoundTag.getBoolean("seg_above");
 	}
 
-	public CentralTowerSegment(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, boolean putMobBridge) {
+	public CentralTowerSegment(StructureTemplateManager structureManager, int genDepth, JigsawPlaceContext jigsawContext, boolean putMobBridge, boolean continueAbove) {
 		super(TFStructurePieceTypes.CENTRAL_TOWER.get(), genDepth, structureManager, TwilightForestMod.prefix("lich_tower/tower_slice"), jigsawContext);
 
 		TowerUtil.addDefaultProcessors(this.placeSettings, true);
 
 		this.putMobBridge = putMobBridge;
+		this.continueAbove = continueAbove;
 	}
 
 	@Override
@@ -43,14 +46,15 @@ public final class CentralTowerSegment extends TwilightJigsawPiece implements Pi
 		super.addAdditionalSaveData(ctx, structureTag);
 
 		structureTag.putBoolean("put_bridge", this.putMobBridge);
+		structureTag.putBoolean("seg_above", this.continueAbove);
 	}
 
-	public static void putTowerSegment(StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, TwilightJigsawPiece parent, StructureTemplateManager structureManager, boolean putMobBridge) {
+	public static void putTowerSegment(StructurePieceAccessor pieceAccessor, RandomSource random, BlockPos sourceJigsawPos, FrontAndTop sourceOrientation, TwilightJigsawPiece parent, StructureTemplateManager structureManager, boolean putMobBridge, boolean bossAbove) {
 		JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(parent, sourceJigsawPos, sourceOrientation, structureManager, TwilightForestMod.prefix("lich_tower/tower_slice"), "twilightforest:lich_tower/tower_below", random);
 
 		if (placeableJunction == null) return;
 
-		StructurePiece towerBase = new CentralTowerSegment(structureManager, parent.getGenDepth() + 1, placeableJunction, putMobBridge);
+		StructurePiece towerBase = new CentralTowerSegment(structureManager, parent.getGenDepth() + 1, placeableJunction, putMobBridge, bossAbove);
 		pieceAccessor.addPiece(towerBase);
 		towerBase.addChildren(parent, pieceAccessor, random);
 	}
@@ -59,8 +63,8 @@ public final class CentralTowerSegment extends TwilightJigsawPiece implements Pi
 	protected void processJigsaw(StructurePiece parent, StructurePieceAccessor pieceAccessor, RandomSource random, JigsawRecord connection, int jigsawIndex) {
 		switch (connection.target()) {
 			case "twilightforest:lich_tower/tower_below" -> {
-				if (this.genDepth < random.nextInt(8, 10)) {
-					CentralTowerSegment.putTowerSegment(pieceAccessor, random, connection.pos(), connection.orientation(), this, this.structureManager, !this.putMobBridge && random.nextInt(3) != 0);
+				if (this.continueAbove) {
+					CentralTowerSegment.putTowerSegment(pieceAccessor, random, connection.pos(), connection.orientation(), this, this.structureManager, !this.putMobBridge && random.nextInt(3) != 0, this.genDepth < random.nextInt(8, 10));
 				} else {
 					JigsawPlaceContext placeableJunction = JigsawPlaceContext.pickPlaceableJunction(this, connection.pos(), connection.orientation(), this.structureManager, TwilightForestMod.prefix("lich_tower/tower_boss_room"), "twilightforest:lich_tower/tower_below", random);
 
@@ -72,7 +76,9 @@ public final class CentralTowerSegment extends TwilightJigsawPiece implements Pi
 				}
 			}
 			case "twilightforest:lich_tower/bridge" -> {
-				TowerBridge.tryRoomAndBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, true, 4 - (random.nextInt((this.genDepth >> 1) + 1) >> 1) - Math.max((this.genDepth >> 2) - 1, 0), false, this.genDepth + 1);
+				int roomMaxSize = 4 - (random.nextInt((this.genDepth >> 1) + 1) >> 1) - Math.max((this.genDepth >> 2) - 1, 0);
+				boolean genMagicGallery = !this.continueAbove && jigsawIndex == 1 && random.nextInt(10) == 0;
+				TowerBridge.tryRoomAndBridge(this, pieceAccessor, random, connection.pos(), connection.orientation(), this.structureManager, true, roomMaxSize, false, this.genDepth + 1, genMagicGallery);
 			}
 			case "twilightforest:mob_bridge" -> {
 				if (this.putMobBridge) {
