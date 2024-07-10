@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import org.jetbrains.annotations.Nullable;
@@ -38,8 +39,14 @@ public final class TowerUtil {
 	}
 
 	@Nullable
-	public static ResourceLocation rollMagicGallery(RandomSource randomSource) {
-		return ArrayUtil.randomOrNull(TowerPieces.MAGIC_GALLERIES, randomSource);
+	public static ResourceLocation rollTowerGallery(RandomSource randomSource) {
+		return ArrayUtil.randomOrNull(TowerPieces.GALLERY_ROOMS, randomSource);
+	}
+
+	@Nullable
+	public static ResourceLocation rollGalleryRoof(RandomSource randomSource, BoundingBox box) {
+		boolean odd = (Math.min(box.getXSpan(), box.getZSpan()) & 1) == 1;
+		return ArrayUtil.randomOrNull(odd ? TowerPieces.GALLERY_ROOFS_ODD : TowerPieces.GALLERY_ROOFS_EVEN, randomSource);
 	}
 
 	public static ResourceLocation rollRandomMobBridge(RandomSource randomSource) {

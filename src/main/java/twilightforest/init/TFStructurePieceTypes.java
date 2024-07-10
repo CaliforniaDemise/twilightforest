@@ -94,6 +94,7 @@ public class TFStructurePieceTypes {
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TOWER_ROOF = registerPieceType("TFLT" + "TRoof", TowerRoof::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TOWER_BEARD = registerPieceType("TFLT" + "TBeard", TowerBeard::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TOWER_ROOM = registerPieceType("TFLT" + "TRoom", TowerRoom::new);
+	public static final DeferredHolder<StructurePieceType, StructurePieceType> TOWER_GALLERY = registerPieceType("TFLT" + "TGallery", TowerGallery::new);
 	public static final DeferredHolder<StructurePieceType, StructurePieceType> TOWER_BOSS_ROOM = registerPieceType("TFLT" + "TBoss", BossRoom::new);
 
 	// Labyrinth
