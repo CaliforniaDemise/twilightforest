@@ -84,8 +84,8 @@ public final class TowerPieces {
 		}
 	};
 	static final ResourceLocation[] GALLERY_ROOMS = new ResourceLocation[] {
-		TwilightForestMod.prefix("lich_tower/gallery/gaia"),
-		TwilightForestMod.prefix("lich_tower/gallery/voidscape")
+		TwilightForestMod.prefix("lich_tower/gallery/darkness"),
+		TwilightForestMod.prefix("lich_tower/gallery/lucid_lands")
 	};
 	static final ResourceLocation[] GALLERY_ROOFS_EVEN = new ResourceLocation[] {
 		TwilightForestMod.prefix("lich_tower/gallery/fence_roof_even"),

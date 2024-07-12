@@ -17,7 +17,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
-import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
@@ -202,5 +201,10 @@ public class MagicPainting extends HangingEntity {
 		ItemStack itemStack = new ItemStack(TFItems.MAGIC_PAINTING.get());
 		itemStack.set(TFDataComponents.MAGIC_PAINTING_VARIANT, this.getVariant());
 		return itemStack;
+	}
+
+	@Override
+	public void setDirection(Direction faceDirection) {
+		super.setDirection(faceDirection);
 	}
 }
