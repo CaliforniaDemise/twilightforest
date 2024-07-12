@@ -6,7 +6,15 @@ import net.minecraft.core.FrontAndTop;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.LecternBlock;
+import net.minecraft.world.level.block.entity.LecternBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
@@ -16,8 +24,11 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import twilightforest.entity.monster.DeathTome;
+import twilightforest.init.TFEntities;
 import twilightforest.init.TFStructurePieceTypes;
 import twilightforest.util.BoundingBoxUtils;
+import twilightforest.util.DirectionUtil;
 import twilightforest.util.jigsaw.JigsawPlaceContext;
 import twilightforest.util.jigsaw.JigsawRecord;
 import twilightforest.util.jigsaw.JigsawUtil;
@@ -141,7 +152,38 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 	}
 
 	@Override
-	protected void handleDataMarker(String label, BlockPos pos, ServerLevelAccessor levelAccessor, RandomSource random, BoundingBox boundingBox) {
+	protected void handleDataMarker(String label, BlockPos pos, ServerLevelAccessor level, RandomSource random, BoundingBox boundingBox) {
+		String[] splitLabel = label.split(":");
+		if (splitLabel.length == 2) {
+			Direction direction = DirectionUtil.fromStringOrElse(splitLabel[1], Direction.NORTH);
+
+			switch (splitLabel[0]) {
+				case "lectern" -> {
+					level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2); // Clears block entity data left by Data Marker
+
+					boolean putMimic = random.nextBoolean();
+					BlockState lectern = Blocks.LECTERN.defaultBlockState()
+						.setValue(HorizontalDirectionalBlock.FACING, direction)
+						.setValue(LecternBlock.HAS_BOOK, !putMimic)
+						.rotate(this.placeSettings.getRotation());
+
+					level.setBlock(pos, lectern, 3);
+
+					if (putMimic) {
+						DeathTome tomeMimic = TFEntities.DEATH_TOME.value().create(level.getLevel());
+						if (tomeMimic != null) {
+							tomeMimic.setOnLectern(true);
+							tomeMimic.setPersistenceRequired();
+							tomeMimic.moveTo(pos, 0, 0);
+							tomeMimic.finalizeSpawn(level, level.getCurrentDifficultyAt(tomeMimic.blockPosition()), MobSpawnType.STRUCTURE, null);
+							level.addFreshEntityWithPassengers(tomeMimic);
+						}
+					} else if (level.getBlockEntity(pos) instanceof LecternBlockEntity lecternBlockEntity) {
+						lecternBlockEntity.setBook(new ItemStack(Items.WRITABLE_BOOK));
+					}
+				}
+			}
+		}
 	}
 
 	@Override
