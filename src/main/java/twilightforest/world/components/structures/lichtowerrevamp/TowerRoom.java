@@ -159,7 +159,7 @@ public final class TowerRoom extends TwilightJigsawPiece implements PieceBeardif
 
 			switch (splitLabel[0]) {
 				case "lectern" -> {
-					level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2); // Clears block entity data left by Data Marker
+					level.removeBlock(pos, false); // Clears block entity data left by Data Marker
 
 					boolean putMimic = random.nextBoolean();
 					BlockState lectern = Blocks.LECTERN.defaultBlockState()

@@ -8,14 +8,18 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.world.PieceBeardifierModifier;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import twilightforest.TFRegistries;
 import twilightforest.entity.MagicPainting;
 import twilightforest.entity.MagicPaintingVariant;
@@ -68,19 +72,45 @@ public class TowerGallery extends TwilightJigsawPiece implements PieceBeardifier
 	protected void handleDataMarker(String label, BlockPos pos, ServerLevelAccessor level, RandomSource random, BoundingBox chunkBounds) {
 		level.removeBlock(pos, false);
 
-		ResourceLocation roomId = ResourceLocation.parse(this.templateName);
-		ResourceLocation variantId = ResourceLocation.fromNamespaceAndPath(roomId.getNamespace(), roomId.getPath().replace("lich_tower/gallery/", ""));
-
 		Direction direction = this.placeSettings.getRotation().rotate(Direction.SOUTH);
 
-		Optional<Holder.Reference<MagicPaintingVariant>> variantHolderOpt = level.registryAccess().registryOrThrow(TFRegistries.Keys.MAGIC_PAINTINGS).getHolder(variantId);
+		Optional<Holder.Reference<MagicPaintingVariant>> variantHolderOpt = variantForGallery(level, this.templateName);
 		MagicPainting galleryPainting = TFEntities.MAGIC_PAINTING.value().create(level.getLevel());
 		if (variantHolderOpt.isPresent() && galleryPainting != null) {
 			galleryPainting.setDirection(direction);
 			galleryPainting.setVariant(variantHolderOpt.get());
-			galleryPainting.moveTo(pos, 0, 0);
+
+			Vec3 placePos = paintingPlacePos(variantHolderOpt.get().value(), pos, this.placeSettings.getRotation());
+			galleryPainting.moveTo(placePos, 0, 0);
+
 			level.addFreshEntityWithPassengers(galleryPainting);
 		}
+	}
+
+	private static @NotNull Vec3 paintingPlacePos(MagicPaintingVariant painting, BlockPos pos, Rotation rotation) {
+		boolean hasOddWidth = ((painting.width() >> 4) & 1) == 1;
+
+		if (hasOddWidth) {
+			Vector3f shift = rotation.rotate(Direction.WEST).step();
+			// FIXME Overshooting by a full block instead of half
+			return pos.getBottomCenter().add(shift.x * 0.5f, shift.y * 0.5f, shift.z * 0.5f);
+		} else {
+			return pos.getBottomCenter();
+		}
+	}
+
+	private static Optional<Holder.Reference<MagicPaintingVariant>> variantForGallery(ServerLevelAccessor level, String roomId) {
+		String variantId = switch (roomId) {
+			case "twilightforest:lich_tower/gallery/castaway_paradise" -> "twilightforest:castaway_paradise";
+			case "twilightforest:lich_tower/gallery/darkness" -> "twilightforest:darkness";
+			case "twilightforest:lich_tower/gallery/lucid_lands" -> "twilightforest:lucid_lands";
+			case "twilightforest:lich_tower/gallery/the_hostile_paradise" -> "twilightforest:untitled"; // TODO switch to the_hostile_paradise, post-rebase
+			default -> null;
+		};
+
+		if (variantId == null) return Optional.empty();
+
+		return level.registryAccess().registryOrThrow(TFRegistries.Keys.MAGIC_PAINTINGS).getHolder(ResourceLocation.parse(variantId));
 	}
 
 	public static void tryPlaceGallery(RandomSource random, StructurePieceAccessor pieceAccessor, @Nullable ResourceLocation roomId, JigsawRecord connection, TwilightJigsawPiece parent, int newDepth, StructureTemplateManager structureManager, String jigsawLabel) {
