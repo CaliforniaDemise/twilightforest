@@ -32,7 +32,6 @@ public class CandelabraProcessor extends StructureProcessor {
 		if (modifiedInfo.state().is(TFBlocks.CANDELABRA)) {
 			BlockState newState = modifiedInfo.state().setValue(CandelabraBlock.LIGHTING, this.lighting);
 
-			// FIXME Fix blockstate <-> blockentity parity for candles, for data resiliency
 			for (BooleanProperty prop : CandelabraBlock.CANDLES) {
 				newState = newState.setValue(prop, true);
 			}
