@@ -1,5 +1,6 @@
 package twilightforest.capabilities.boss;
 
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -16,6 +17,12 @@ public interface IBossCapability extends INBTSerializable<NBTTagCompound> {
     BossVariant getBossVariant();
 
     BlockPos getHomePos();
+
+    default BlockPos getHomePos(EntityLivingBase entity) {
+        BlockPos position = entity instanceof EntityCreature && this.getHomePos() == BlockPos.ORIGIN ? ((EntityCreature) entity).getHomePosition() : this.getHomePos();
+        if (position == null) position = BlockPos.ORIGIN;
+        return position;
+    }
 
     default boolean isBoss() {
         return this.getBossVariant() != null;

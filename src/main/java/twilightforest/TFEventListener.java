@@ -269,7 +269,7 @@ public class TFEventListener {
 		IBossCapability capability = living.getCapability(CapabilityList.BOSS, null);
 		if (capability == null || !capability.isBoss()) return;
 		BossVariant variant = capability.getBossVariant();
-		BlockPos pos = capability.getHomePos();
+		BlockPos pos = capability.getHomePos(living);
 		BossEvent.Death death = new BossEvent.Death(world, pos, variant, living);
 		MinecraftForge.EVENT_BUS.post(death);
 		if (event.isCanceled()) return;

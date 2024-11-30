@@ -18,62 +18,9 @@
   "parent": "twilightforest:progress_naga",
   "criteria": {
     "kill_lich": {
-      "trigger": "minecraft:player_killed_entity",
+      "trigger": "twilightforest:structure_cleared",
       "conditions": {
-        "entity": {
-          "type": "twilightforest:lich"
-        }
-      }
-    },
-    "trophy": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "twilightforest:trophy",
-            "data": 1
-          }
-        ]
-      }
-    },
-    "lifedrain_scepter": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "twilightforest:lifedrain_scepter"
-          }
-        ]
-      }
-    },
-    "twilight_scepter": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "twilightforest:twilight_scepter"
-          }
-        ]
-      }
-    },
-    "zombie_scepter": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "twilightforest:zombie_scepter"
-          }
-        ]
-      }
-    },
-    "shield_scepter": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "twilightforest:shield_scepter"
-          }
-        ]
+        "structure": "lich_tower"
       }
     },
     "kill_naga": {
@@ -84,7 +31,7 @@
     }
   },
   "requirements": [
-    [ "kill_lich", "trophy", "lifedrain_scepter", "twilight_scepter", "zombie_scepter", "shield_scepter" ],
+    [ "kill_lich" ],
     [ "kill_naga" ]
   ],
   "rewards": {

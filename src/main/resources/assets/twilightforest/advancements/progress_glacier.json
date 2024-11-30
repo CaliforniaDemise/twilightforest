@@ -19,22 +19,9 @@
   "parent": "twilightforest:progress_yeti",
   "criteria": {
     "queen": {
-      "trigger": "minecraft:player_killed_entity",
+      "trigger": "twilightforest:structure_cleared",
       "conditions": {
-        "entity": {
-          "type": "twilightforest:snow_queen"
-        }
-      }
-    },
-    "trophy": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "twilightforest:trophy",
-            "data": 5
-          }
-        ]
+        "structure": "ice_tower"
       }
     },
     "previous_progression": {
@@ -45,7 +32,7 @@
     }
   },
   "requirements": [
-    [ "queen", "trophy" ],
+    [ "queen" ],
     [ "previous_progression" ]
   ],
   "rewards": {

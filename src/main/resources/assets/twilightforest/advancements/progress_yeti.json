@@ -17,12 +17,10 @@
   "parent": "twilightforest:progress_lich",
   "criteria": {
     "yeti": {
-      "trigger": "minecraft:player_killed_entity",
-      "conditions": { "entity": { "type": "twilightforest:yeti_alpha" } }
-    },
-    "fur": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": { "items": [  { "item": "twilightforest:alpha_fur" } ] }
+      "trigger": "twilightforest:structure_cleared",
+      "conditions": {
+        "structure": "yeti_lairs"
+      }
     },
     "previous_progression": {
       "trigger": "twilightforest:has_advancement",
@@ -30,7 +28,7 @@
     }
   },
   "requirements": [
-    [ "yeti", "fur" ],
+    [ "yeti" ],
     [ "previous_progression" ]
   ],
   "rewards": {

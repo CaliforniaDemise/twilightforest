@@ -59,12 +59,16 @@ public class BossCapabilityHandler implements IBossCapability, INBTSerializable<
     public NBTTagCompound serializeNBT() {
         NBTTagCompound tag = new NBTTagCompound();
         if (this.variant != null) tag.setInteger("variant", this.variant.ordinal());
+        else tag.setInteger("variant", -1);
         tag.setTag("homePos", NBTUtil.createPosTag(this.homePos));
         return tag;
     }
 
     @Override
     public void deserializeNBT(NBTTagCompound tag) {
-        this.initBoss(BossVariant.getVariant(tag.getInteger("variant")), NBTUtil.getPosFromTag(tag.getCompoundTag("homePos")));
+        int id = tag.getInteger("variant");
+        BossVariant variant = null;
+        if (id > -1) variant = BossVariant.getVariant(id);
+        this.initBoss(variant, NBTUtil.getPosFromTag(tag.getCompoundTag("homePos")));
     }
 }

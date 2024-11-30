@@ -18,32 +18,9 @@
   "parent": "twilightforest:progress_labyrinth",
   "criteria": {
     "hydra": {
-      "trigger": "minecraft:player_killed_entity",
+      "trigger": "twilightforest:structure_cleared",
       "conditions": {
-        "entity": {
-          "type": "twilightforest:hydra"
-        }
-      }
-    },
-    "trophy": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "twilightforest:trophy",
-            "data": 2
-          }
-        ]
-      }
-    },
-    "blood": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "twilightforest:fiery_blood"
-          }
-        ]
+        "structure": "hydra_lair"
       }
     },
     "stroganoff": {
@@ -54,7 +31,7 @@
     }
   },
   "requirements": [
-    [ "hydra", "trophy", "blood" ],
+    [ "hydra" ],
     [ "stroganoff" ]
   ],
   "rewards": {

@@ -15,8 +15,10 @@
   "parent": "twilightforest:progress_thorns",
   "criteria": {
     "discover": {
-      "trigger": "minecraft:location",
-      "conditions": { "feature": "twilightforest:final_castle" }
+      "trigger": "twilightforest:structure_cleared",
+      "conditions": {
+        "structure": "final_castle"
+      }
     },
     "previous_progression": {
       "trigger": "twilightforest:has_advancement",
