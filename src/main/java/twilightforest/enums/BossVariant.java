@@ -41,7 +41,7 @@ public enum BossVariant implements IStringSerializable {
 
 	@Override
 	public String getName() {
-		return name().toLowerCase(Locale.ROOT);
+		return name().toLowerCase(Locale.US);
 	}
 
 	public TrophyType getTrophyType() {

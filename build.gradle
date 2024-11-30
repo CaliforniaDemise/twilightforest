@@ -92,7 +92,7 @@ dependencies {
     //compileOnly rfg.deobf("team.chisel:Chisel:MC${minecraft_version}-${chisel_version}")
 
     // blamejared
-    compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700"
+    implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700"
     compileOnly rfg.deobf("blusunrize:ImmersiveEngineering:${immersive_engineering_version}")
     compileOnly rfg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
 
