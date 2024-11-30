@@ -332,7 +332,7 @@ public class ContainerTFUncrafting extends Container {
 	}
 
 	public static boolean isAllowed(ItemStack stack) {
-		return IS_WHITELIST == STACK_CHECK.contains(stack);
+		return !STACK_CHECK.contains(stack);
 	}
 
 	public static boolean isAllowed(IRecipe recipe) {

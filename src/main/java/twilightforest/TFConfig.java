@@ -274,7 +274,7 @@ public class TFConfig {
 
 	@Config.RequiresMcRestart
 	@Config.LangKey(config + "uncrafting.whitelist")
-	@Config.Comment("Turn uncrafting check list to whitelist lists. They're blacklist by default.")
+	@Config.Comment("Turn uncrafting recipe list to whitelist. They're blacklist by default.")
 	public static boolean whitelistUncrafting = false;
 
 	@Config.RequiresMcRestart
