@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import stanhebben.zenscript.annotations.ZenExpansion;
 import stanhebben.zenscript.annotations.ZenMethod;
 import twilightforest.compat.crafttweaker.events.boss.BossConstructionEvent;
+import twilightforest.compat.crafttweaker.events.boss.BossDeathEvent;
 import twilightforest.compat.crafttweaker.events.boss.BossSpawnEvent;
 import twilightforest.events.BossEvent;
 
@@ -23,6 +24,7 @@ public class CTTFEventManager {
 
     public static final EventList<BossConstructionEvent> elBossConstruction = new EventList<>();
     public static final EventList<BossSpawnEvent> elBossSpawn = new EventList<>();
+    public static final EventList<BossDeathEvent> elBossDeath = new EventList<>();
 
     @ZenMethod
     public static IEventHandle onBossConstruction(IEventManager manager, IEventHandler<BossConstructionEvent> event) {
@@ -32,6 +34,11 @@ public class CTTFEventManager {
     @ZenMethod
     public static IEventHandle onBossSpawn(IEventManager manager, IEventHandler<BossSpawnEvent> event) {
         return elBossSpawn.add(event);
+    }
+
+    @ZenMethod
+    public static IEventHandle onBossDeath(IEventManager manager, IEventHandler<BossDeathEvent> event) {
+        return elBossDeath.add(event);
     }
 
     @SubscribeEvent
@@ -49,6 +56,15 @@ public class CTTFEventManager {
             BossSpawnEvent e = new BossSpawnEvent(event);
             CTTFEventManager.elBossSpawn.publish(e);
             event.setResult(Event.Result.valueOf(e.getResult().toUpperCase(Locale.US)));
+        }
+    }
+
+    @SubscribeEvent
+    public static void onBossDeath(BossEvent.Death event) {
+        if (CTTFEventManager.elBossDeath.hasHandlers()) {
+            BossDeathEvent e = new BossDeathEvent(event);
+            CTTFEventManager.elBossDeath.publish(e);
+            event.setCanceled(e.isCanceled());
         }
     }
 

@@ -270,7 +270,7 @@ public class TFEventListener {
 		if (capability == null || !capability.isBoss()) return;
 		BossVariant variant = capability.getBossVariant();
 		BlockPos pos = capability.getHomePos(living);
-		BossEvent.Death death = new BossEvent.Death(world, pos, variant, living);
+		BossEvent.Death death = new BossEvent.Death(world, pos, variant, living, event.getSource());
 		MinecraftForge.EVENT_BUS.post(death);
 		if (event.isCanceled()) return;
 		if (variant == BossVariant.KNIGHT_PHANTOM) {
