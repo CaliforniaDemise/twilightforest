@@ -5,18 +5,12 @@
   "description": "An enchanted forest dimension.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "https://minecraft.curseforge.com/projects/the-twilight-forest",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/the-twilight-forest-deforestation-edition",
   "updateUrl": "",
   "authorList": [
-    "Benimatic",
-    "AtomicBlom",
-    "Drullkus",
-    "Killer_Demon",
-    "quadraxis",
-    "Tamaized",
-    "williewillus"
+    "MetallicaFan011"
   ],
-  "credits": "By Benimatic (Ben Mazur)",
+  "credits": "Originally made by Benimatic (Ben Mazur), with the help of AtomicBlom, Drullkus, Killer_Demon, quadraxis, Tamaized and williewillus.",
   "logoFile": "assets/twilightforest/textures/twilightforest_logo.png",
   "screenshots": [],
   "dependencies": []
