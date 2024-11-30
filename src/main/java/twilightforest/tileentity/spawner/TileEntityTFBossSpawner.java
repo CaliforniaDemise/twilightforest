@@ -55,7 +55,7 @@ public abstract class TileEntityTFBossSpawner extends TileEntity implements ITic
 		MinecraftForge.EVENT_BUS.post(event);
 		Event.Result result = event.getResult();
 		if (result == Event.Result.DENY) return;
-		boolean check = result == Event.Result.ALLOW || (playerCheck && world.getDifficulty() != EnumDifficulty.PEACEFUL);
+		boolean check = result == Event.Result.ALLOW || playerCheck;
 		if (check) {
 			if (world.getDifficulty() == EnumDifficulty.PEACEFUL && this.living instanceof EntityMob) return;
 			if (!this.world.isRemote && this.spawnMyBoss(this.living)) {
