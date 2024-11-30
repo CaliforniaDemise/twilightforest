@@ -3,11 +3,12 @@ package twilightforest.tileentity.spawner;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import twilightforest.entity.boss.EntityTFYetiAlpha;
+import twilightforest.enums.BossVariant;
 
 public class TileEntityTFAlphaYetiSpawner extends TileEntityTFBossSpawner {
 
 	public TileEntityTFAlphaYetiSpawner() {
-		super(EntityList.getKey(EntityTFYetiAlpha.class));
+		super(EntityList.getKey(EntityTFYetiAlpha.class), BossVariant.ALPHA_YETI);
 	}
 
 	@Override

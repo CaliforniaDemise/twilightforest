@@ -28,6 +28,7 @@ import twilightforest.TwilightForestMod;
 import twilightforest.block.BlockTFBossSpawner;
 import twilightforest.block.BlockTFTowerDevice;
 import twilightforest.block.TFBlocks;
+import twilightforest.capabilities.boss.IBossCapability;
 import twilightforest.client.particle.TFParticleType;
 import twilightforest.entity.EntityTFMiniGhast;
 import twilightforest.entity.EntityTFTowerGhast;
@@ -82,6 +83,7 @@ public class EntityTFUrGhast extends EntityTFTowerGhast {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(DATA_TANTRUM, false);
+		IBossCapability.initBoss(this, BossVariant.UR_GHAST);
 	}
 
 	@Override
@@ -566,17 +568,8 @@ public class EntityTFUrGhast extends EntityTFTowerGhast {
 		}
 	}
 
-	@Override
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		// mark the tower as defeated
-		if (!world.isRemote) {
-			TFWorld.markStructureConquered(world, findChestCoords(), TFFeature.DARK_TOWER);
-		}
-	}
-
 	private BlockPos findChestCoords() {
-		if (trapLocations.size() > 0) {
+		if (!trapLocations.isEmpty()) {
 			// average the location of the traps we've found, and scan again from there
 			int ax = 0, ay = 0, az = 0;
 

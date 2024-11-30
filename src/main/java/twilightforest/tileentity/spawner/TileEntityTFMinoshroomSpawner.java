@@ -3,11 +3,12 @@ package twilightforest.tileentity.spawner;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import twilightforest.entity.boss.EntityTFMinoshroom;
+import twilightforest.enums.BossVariant;
 
 public class TileEntityTFMinoshroomSpawner extends TileEntityTFBossSpawner {
 
 	public TileEntityTFMinoshroomSpawner() {
-		super(EntityList.getKey(EntityTFMinoshroom.class));
+		super(EntityList.getKey(EntityTFMinoshroom.class), BossVariant.MINOSHROOM);
 	}
 
 	@Override

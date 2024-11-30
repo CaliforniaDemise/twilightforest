@@ -39,6 +39,7 @@ import twilightforest.TFSounds;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.BlockTFBossSpawner;
 import twilightforest.block.TFBlocks;
+import twilightforest.capabilities.boss.IBossCapability;
 import twilightforest.client.particle.TFParticleType;
 import twilightforest.entity.IBreathAttacker;
 import twilightforest.entity.ai.EntityAITFHoverBeam;
@@ -81,6 +82,7 @@ public class EntityTFSnowQueen extends EntityMob implements IEntityMultiPart, IB
 
 		this.isImmuneToFire = true;
 		this.experienceValue = 317;
+		IBossCapability.initBoss(this, BossVariant.SNOW_QUEEN);
 	}
 
 	@Override
@@ -252,15 +254,6 @@ public class EntityTFSnowQueen extends EntityMob implements IEntityMultiPart, IB
 			setDead();
 		} else {
 			super.despawnEntity();
-		}
-	}
-
-	@Override
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		// mark the tower as defeated
-		if (!world.isRemote) {
-			TFWorld.markStructureConquered(world, new BlockPos(this), TFFeature.ICE_TOWER);
 		}
 	}
 

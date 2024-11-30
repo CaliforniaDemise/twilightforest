@@ -3,11 +3,12 @@ package twilightforest.tileentity.spawner;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import twilightforest.entity.boss.EntityTFUrGhast;
+import twilightforest.enums.BossVariant;
 
 public class TileEntityTFTowerBossSpawner extends TileEntityTFBossSpawner {
 
 	public TileEntityTFTowerBossSpawner() {
-		super(EntityList.getKey(EntityTFUrGhast.class));
+		super(EntityList.getKey(EntityTFUrGhast.class), BossVariant.UR_GHAST);
 	}
 
 	@Override

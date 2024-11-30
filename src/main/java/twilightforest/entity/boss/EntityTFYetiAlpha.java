@@ -40,6 +40,7 @@ import twilightforest.TFSounds;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.BlockTFBossSpawner;
 import twilightforest.block.TFBlocks;
+import twilightforest.capabilities.boss.IBossCapability;
 import twilightforest.client.particle.TFParticleType;
 import twilightforest.entity.IHostileMount;
 import twilightforest.entity.ai.EntityAIStayNearHome;
@@ -107,6 +108,7 @@ public class EntityTFYetiAlpha extends EntityMob implements IRangedAttackMob, IH
 		super.entityInit();
 		dataManager.register(RAMPAGE_FLAG, (byte) 0);
 		dataManager.register(TIRED_FLAG, (byte) 0);
+		IBossCapability.initBoss(this, BossVariant.ALPHA_YETI);
 	}
 
 	@Override
@@ -390,9 +392,9 @@ public class EntityTFYetiAlpha extends EntityMob implements IRangedAttackMob, IH
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		// mark the lair as defeated
-		if (!world.isRemote) {
-			TFWorld.markStructureConquered(world, new BlockPos(this), TFFeature.YETI_CAVE);
-		}
+//		if (!world.isRemote) {
+//			TFWorld.markStructureConquered(world, new BlockPos(this), TFFeature.YETI_CAVE);
+//		}
 	}
 
 	@Override

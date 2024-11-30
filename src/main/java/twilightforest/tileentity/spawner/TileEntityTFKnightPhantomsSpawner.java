@@ -2,12 +2,14 @@ package twilightforest.tileentity.spawner;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import twilightforest.entity.boss.EntityTFKnightPhantom;
+import twilightforest.enums.BossVariant;
 import twilightforest.item.TFItems;
 
 public class TileEntityTFKnightPhantomsSpawner extends TileEntityTFBossSpawner {
@@ -17,7 +19,7 @@ public class TileEntityTFKnightPhantomsSpawner extends TileEntityTFBossSpawner {
 	private int spawned = 0;
 
 	public TileEntityTFKnightPhantomsSpawner() {
-		super(EntityList.getKey(EntityTFKnightPhantom.class));
+		super(EntityList.getKey(EntityTFKnightPhantom.class), BossVariant.KNIGHT_PHANTOM);
 	}
 
 	@Override
@@ -27,10 +29,10 @@ public class TileEntityTFKnightPhantomsSpawner extends TileEntityTFBossSpawner {
 	}
 
 	@Override
-	protected boolean spawnMyBoss() {
+	protected boolean spawnMyBoss(EntityLivingBase living) {
 		for (int i = spawned; i < COUNT; i++) {
 			// create creature
-			EntityLiving myCreature = makeMyCreature();
+			EntityLiving myCreature = (EntityLiving) living;
 
 			float angle = (360F / COUNT) * i;
 			final float distance = 4F;
@@ -60,7 +62,7 @@ public class TileEntityTFKnightPhantomsSpawner extends TileEntityTFBossSpawner {
 	}
 
 	@Override
-	protected void initializeCreature(EntityLiving myCreature) {
+	protected void initializeCreature(EntityLivingBase myCreature) {
 		if (myCreature instanceof EntityTFKnightPhantom) {
 			((EntityTFKnightPhantom) myCreature).setHomePosAndDistance(pos, 46);
 		}

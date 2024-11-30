@@ -26,15 +26,14 @@ import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
-import twilightforest.TFFeature;
 import twilightforest.TFSounds;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.BlockTFBossSpawner;
 import twilightforest.block.TFBlocks;
+import twilightforest.capabilities.boss.IBossCapability;
 import twilightforest.enums.BossVariant;
 import twilightforest.util.EntityUtil;
 import twilightforest.util.WorldUtil;
-import twilightforest.world.TFWorld;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -262,6 +261,7 @@ public class EntityTFHydra extends EntityLiving implements IEntityMultiPart, IMo
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(DATA_SPAWNHEADS, false);
+		IBossCapability.initBoss(this, BossVariant.HYDRA);
 	}
 
 	private boolean shouldSpawnHeads() {
@@ -711,15 +711,6 @@ public class EntityTFHydra extends EntityLiving implements IEntityMultiPart, IMo
 	@Override
 	protected float getSoundVolume() {
 		return 2F;
-	}
-
-	@Override
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		// mark the lair as defeated
-		if (!world.isRemote) {
-			TFWorld.markStructureConquered(world, new BlockPos(this), TFFeature.HYDRA_LAIR);
-		}
 	}
 
 	@Override

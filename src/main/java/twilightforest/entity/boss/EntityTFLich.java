@@ -22,22 +22,20 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import twilightforest.TFFeature;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.BlockTFBossSpawner;
 import twilightforest.block.TFBlocks;
+import twilightforest.capabilities.boss.IBossCapability;
 import twilightforest.entity.EntityTFSwarmSpider;
 import twilightforest.entity.ai.EntityAITFLichMinions;
 import twilightforest.entity.ai.EntityAITFLichShadows;
 import twilightforest.enums.BossVariant;
-import twilightforest.world.TFWorld;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -127,6 +125,7 @@ public class EntityTFLich extends EntityMob {
 		dataManager.register(DATA_SHIELDSTRENGTH, (byte) INITIAL_SHIELD_STRENGTH);
 		dataManager.register(DATA_MINIONSLEFT, (byte) INITIAL_MINIONS_TO_SUMMON);
 		dataManager.register(DATA_ATTACKTYPE, (byte) 0);
+		IBossCapability.initBoss(this, BossVariant.LICH);
 	}
 
 	@Override
@@ -590,15 +589,6 @@ public class EntityTFLich extends EntityMob {
 		setMinionsToSummon(compound.getByte("MinionsToSummon"));
 		if (this.hasCustomName()) {
 			this.bossInfo.setName(this.getDisplayName());
-		}
-	}
-
-	@Override
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		// mark the tower as defeated
-		if (!world.isRemote && !this.isShadowClone()) {
-			TFWorld.markStructureConquered(world, new BlockPos(this), TFFeature.LICH_TOWER);
 		}
 	}
 

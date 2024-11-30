@@ -32,11 +32,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.GameRuleChangeEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
@@ -67,6 +67,7 @@ import twilightforest.block.BlockTFGiantBlock;
 import twilightforest.block.BlockTFPortal;
 import twilightforest.block.TFBlocks;
 import twilightforest.capabilities.CapabilityList;
+import twilightforest.capabilities.boss.IBossCapability;
 import twilightforest.capabilities.shield.IShieldCapability;
 import twilightforest.compat.Baubles;
 import twilightforest.compat.TFCompat;
@@ -74,8 +75,13 @@ import twilightforest.enchantment.TFEnchantment;
 import twilightforest.entity.EntityTFCharmEffect;
 import twilightforest.entity.IHostileMount;
 import twilightforest.entity.ITFProjectile;
+import twilightforest.entity.boss.EntityTFKnightPhantom;
+import twilightforest.entity.boss.EntityTFUrGhast;
+import twilightforest.enums.BossVariant;
+import twilightforest.events.BossEvent;
 import twilightforest.item.ItemTFPhantomArmor;
 import twilightforest.item.TFItems;
+import twilightforest.loot.TFTreasure;
 import twilightforest.network.PacketAreaProtection;
 import twilightforest.network.PacketEnforceProgressionStatus;
 import twilightforest.network.PacketSetSkylightEnabled;
@@ -87,6 +93,7 @@ import twilightforest.world.ChunkGeneratorTFBase;
 import twilightforest.world.TFWorld;
 import twilightforest.world.WorldProviderTwilightForest;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -254,6 +261,47 @@ public class TFEventListener {
 		((BlockTFCritter) state.getBlock()).squish(world, pos, entity);
 	}
 
+	@SubscribeEvent
+	public static void onBossDeath(LivingDeathEvent event) {
+		EntityLivingBase living = event.getEntityLiving();
+		World world = living.world;
+		if (world.isRemote) return;
+		IBossCapability capability = living.getCapability(CapabilityList.BOSS, null);
+		if (capability == null || !capability.isBoss()) return;
+		BossVariant variant = capability.getBossVariant();
+		BlockPos pos = capability.getHomePos();
+		BossEvent.Death death = new BossEvent.Death(world, pos, variant, living);
+		MinecraftForge.EVENT_BUS.post(death);
+		if (event.isCanceled()) return;
+		if (variant == BossVariant.KNIGHT_PHANTOM) {
+			if (living instanceof EntityTFKnightPhantom && !((EntityTFKnightPhantom) living).getNearbyKnights().isEmpty()) return;
+			TFTreasure.stronghold_boss.generateChest(world, pos, false);
+		}
+		else if (variant == BossVariant.UR_GHAST) {
+			if (living instanceof EntityTFUrGhast) return;
+			TFTreasure.darktower_boss.generateChest(world, pos, false);
+		}
+		TFFeature feature = getBossFeature(variant);
+		if (feature != null) TFWorld.markStructureConquered(world, pos, feature);
+	}
+
+	@Nullable
+	private static TFFeature getBossFeature(BossVariant variant) {
+		switch (variant) {
+			case NAGA: return TFFeature.NAGA_COURTYARD;
+			case LICH: return TFFeature.LICH_TOWER;
+			case HYDRA: return TFFeature.HYDRA_LAIR;
+			case UR_GHAST: return TFFeature.DARK_TOWER;
+			case QUEST_RAM: return TFFeature.QUEST_GROVE;
+			case FINAL_BOSS: return TFFeature.FINAL_CASTLE;
+			case MINOSHROOM: return TFFeature.LABYRINTH;
+			case ALPHA_YETI: return TFFeature.YETI_CAVE;
+			case SNOW_QUEEN: return TFFeature.ICE_TOWER;
+			case KNIGHT_PHANTOM: return TFFeature.KNIGHT_STRONGHOLD;
+			default: return null;
+		}
+	}
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void charmOfLife(LivingDeathEvent event) {
 		EntityLivingBase living = event.getEntityLiving();
@@ -297,9 +345,7 @@ public class TFEventListener {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void charmOfKeeping(LivingDeathEvent event) {
 		EntityLivingBase living = event.getEntityLiving();
-
 		if (living.world.isRemote || !(living instanceof EntityPlayer) || living instanceof FakePlayer || living.world.getGameRules().getBoolean("keepInventory")) return;
-
 		keepItems((EntityPlayer) living);
 	}
 

@@ -11,22 +11,31 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import twilightforest.capabilities.boss.BossCapabilityHandler;
+import twilightforest.capabilities.boss.BossCapabilityStorage;
+import twilightforest.capabilities.boss.IBossCapability;
 import twilightforest.capabilities.shield.IShieldCapability;
 import twilightforest.capabilities.shield.ShieldCapabilityHandler;
 import twilightforest.capabilities.shield.ShieldCapabilityStorage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class CapabilityList {
 
 	@CapabilityInject(IShieldCapability.class)
 	public static final Capability<IShieldCapability> SHIELDS;
 
+	@CapabilityInject(IBossCapability.class)
+	public static final Capability<IBossCapability> BOSS;
+
 	static {
 		SHIELDS = null;
+		BOSS = null;
 	}
 
 	public static void registerCapabilities() {
+		CapabilityManager.INSTANCE.register(IBossCapability.class, new BossCapabilityStorage(), BossCapabilityHandler::new);
 		CapabilityManager.INSTANCE.register(IShieldCapability.class, new ShieldCapabilityStorage(), ShieldCapabilityHandler::new);
 		MinecraftForge.EVENT_BUS.register(CapabilityList.class);
 	}
@@ -36,7 +45,7 @@ public class CapabilityList {
 		if (e.getObject() instanceof EntityLivingBase) {
 			e.addCapability(IShieldCapability.ID, new ICapabilitySerializable<NBTTagCompound>() {
 
-				IShieldCapability inst = SHIELDS.getDefaultInstance();
+				final IShieldCapability inst = SHIELDS.getDefaultInstance();
 
 				{
 					inst.setEntity((EntityLivingBase) e.getObject());
@@ -62,6 +71,31 @@ public class CapabilityList {
 					SHIELDS.getStorage().readNBT(SHIELDS, inst, null, nbt);
 				}
 
+			});
+			e.addCapability(IBossCapability.ID, new ICapabilitySerializable<NBTTagCompound>() {
+
+				final IBossCapability inst = BOSS.getDefaultInstance();
+
+				@Override
+				public NBTTagCompound serializeNBT() {
+					return (NBTTagCompound) BOSS.getStorage().writeNBT(BOSS, inst, null);
+				}
+
+				@Override
+				public void deserializeNBT(NBTTagCompound nbt) {
+					 BOSS.getStorage().readNBT(BOSS, inst, null, nbt);
+				}
+
+				@Override
+				public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+					return capability == BOSS;
+				}
+
+				@Nullable
+				@Override
+				public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+					return capability == BOSS ? BOSS.<T>cast(inst) : null;
+				}
 			});
 		}
 	}

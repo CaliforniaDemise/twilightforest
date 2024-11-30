@@ -40,16 +40,15 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
-import twilightforest.TFFeature;
 import twilightforest.TFSounds;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.BlockTFBossSpawner;
 import twilightforest.block.TFBlocks;
+import twilightforest.capabilities.boss.IBossCapability;
 import twilightforest.enums.BossVariant;
 import twilightforest.network.PacketThrowPlayer;
 import twilightforest.network.TFPacketHandler;
 import twilightforest.util.EntityUtil;
-import twilightforest.world.TFWorld;
 
 public class EntityTFNaga extends EntityMob implements IEntityMultiPart {
 
@@ -94,6 +93,7 @@ public class EntityTFNaga extends EntityMob implements IEntityMultiPart {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(DATA_DAZE, false);
+		IBossCapability.initBoss(this, BossVariant.NAGA);
 	}
 
 	public boolean isDazed() {
@@ -830,15 +830,6 @@ public class EntityTFNaga extends EntityMob implements IEntityMultiPart {
 
 		if (this.hasCustomName()) {
 			this.bossInfo.setName(this.getDisplayName());
-		}
-	}
-
-	@Override
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		// mark the courtyard as defeated
-		if (!world.isRemote) {
-			TFWorld.markStructureConquered(world, new BlockPos(this), TFFeature.NAGA_COURTYARD);
 		}
 	}
 

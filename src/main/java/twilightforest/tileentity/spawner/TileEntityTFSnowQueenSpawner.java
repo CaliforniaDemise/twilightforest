@@ -3,11 +3,12 @@ package twilightforest.tileentity.spawner;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import twilightforest.entity.boss.EntityTFSnowQueen;
+import twilightforest.enums.BossVariant;
 
 public class TileEntityTFSnowQueenSpawner extends TileEntityTFBossSpawner {
 
 	public TileEntityTFSnowQueenSpawner() {
-		super(EntityList.getKey(EntityTFSnowQueen.class));
+		super(EntityList.getKey(EntityTFSnowQueen.class), BossVariant.SNOW_QUEEN);
 	}
 
 	@Override

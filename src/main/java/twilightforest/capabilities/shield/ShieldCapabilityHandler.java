@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import twilightforest.network.PacketUpdateShield;
@@ -106,5 +107,18 @@ public class ShieldCapabilityHandler implements IShieldCapability {
 				TFPacketHandler.CHANNEL.sendTo(message, (EntityPlayerMP) host);
 			}
 		}
+	}
+
+	@Override
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setInteger("tempshields", this.temporaryShieldsLeft());
+		tag.setInteger("permshields", this.permanentShieldsLeft());
+		return tag;
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound tag) {
+		this.initShields(tag.getInteger("tempshields"), tag.getInteger("permshields"));
 	}
 }

@@ -32,9 +32,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import twilightforest.TFFeature;
 import twilightforest.TFSounds;
-import twilightforest.loot.TFTreasure;
+import twilightforest.capabilities.boss.IBossCapability;
 import twilightforest.block.BlockTFBossSpawner;
 import twilightforest.block.TFBlocks;
 import twilightforest.enums.BossVariant;
@@ -45,7 +44,6 @@ import twilightforest.entity.ai.EntityAITFFindEntityNearestPlayer;
 import twilightforest.entity.ai.EntityAITFPhantomUpdateFormationAndMove;
 import twilightforest.entity.ai.EntityAITFPhantomWatchAndAttack;
 import twilightforest.item.TFItems;
-import twilightforest.world.TFWorld;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -90,6 +88,7 @@ public class EntityTFKnightPhantom extends EntityFlying implements IMob {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(FLAG_CHARGING, false);
+		IBossCapability.initBoss(this, BossVariant.KNIGHT_PHANTOM);
 	}
 
 	@Override
@@ -168,23 +167,6 @@ public class EntityTFKnightPhantom extends EntityFlying implements IMob {
 			double d1 = rand.nextGaussian() * 0.02D;
 			double d2 = rand.nextGaussian() * 0.02D;
 			world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, posX + (double) (rand.nextFloat() * width * 2.0F) - (double) width, posY + (double) (rand.nextFloat() * height), posZ + (double) (rand.nextFloat() * width * 2.0F) - (double) width, d0, d1, d2);
-		}
-	}
-
-	@Override
-	public void onDeath(DamageSource cause) {
-
-		super.onDeath(cause);
-
-		if (!world.isRemote && getNearbyKnights().isEmpty()) {
-
-			BlockPos treasurePos = hasHome() ? getHomePosition().down() : new BlockPos(this);
-
-			// make treasure for killing the last knight
-			TFTreasure.stronghold_boss.generateChest(world, treasurePos, false);
-
-			// mark the stronghold as defeated
-			TFWorld.markStructureConquered(world, treasurePos, TFFeature.KNIGHT_STRONGHOLD);
 		}
 	}
 

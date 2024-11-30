@@ -4,15 +4,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import twilightforest.entity.boss.EntityTFHydra;
 import twilightforest.entity.boss.EntityTFHydraHead;
+import twilightforest.enums.BossVariant;
 
 public class TileEntityTFHydraSpawner extends TileEntityTFBossSpawner {
 
 	public TileEntityTFHydraSpawner() {
-		super(EntityList.getKey(EntityTFHydra.class));
+		super(EntityList.getKey(EntityTFHydra.class), BossVariant.HYDRA);
 	}
 
 	@Override
-	protected int getRange() {
+	public int getRange() {
 		return LONG_RANGE;
 	}
 

@@ -3,11 +3,12 @@ package twilightforest.tileentity.spawner;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import twilightforest.entity.boss.EntityTFLich;
+import twilightforest.enums.BossVariant;
 
 public class TileEntityTFLichSpawner extends TileEntityTFBossSpawner {
 
 	public TileEntityTFLichSpawner() {
-		super(EntityList.getKey(EntityTFLich.class));
+		super(EntityList.getKey(EntityTFLich.class), BossVariant.LICH);
 	}
 
 	@Override
