@@ -18,8 +18,10 @@ import twilightforest.item.recipe.UncraftingShapelessRecipe;
 public class CTUncraftingTable {
 
     @ZenMethod
-    public static void addStackToList(IItemStack stack) {
-        ContainerTFUncrafting.addStackToList(CraftTweakerMC.getItemStack(stack));
+    public static void addStackToList(IIngredient ingredient) {
+        for (IItemStack stack : ingredient.getItemArray()) {
+            ContainerTFUncrafting.addStackToList(CraftTweakerMC.getItemStack(stack));
+        }
     }
 
     @ZenMethod
