@@ -87,10 +87,10 @@ public class TFGenCanopyMushroom extends TFTreeGenerator {
 			if (src.getX() != dest.getX() || src.getZ() != dest.getZ()) {
 				// branch
 				TFGenerator.drawBresehnam(this, world, src, new BlockPos(dest.getX(), src.getY(), dest.getZ()), branchState);
-				TFGenerator.drawBresehnam(this, world, new BlockPos(dest.getX(), src.getY() + 1, dest.getZ()), dest.down(), treeState);
+				TFGenerator.drawBresehnam(this, world, new BlockPos(dest.getX(), src.getY() + 1, dest.getZ()), dest, treeState);
 			} else {
 				// trunk
-				TFGenerator.drawBresehnam(this, world, src, dest.down(), treeState);
+				TFGenerator.drawBresehnam(this, world, src, dest, treeState);
 			}
 
 			if (trunk) {
