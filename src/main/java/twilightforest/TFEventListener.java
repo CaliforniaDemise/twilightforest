@@ -250,7 +250,6 @@ public class TFEventListener {
 		EntityLivingBase entity = event.getEntityLiving();
 		World world = entity.world;
 		double speed = -entity.motionY;
-		if (entity instanceof EntityPlayer) System.out.println(speed);
 		double maxSpeed = 0.07D;
 		ItemStack boots = entity.getItemStackFromSlot(EntityEquipmentSlot.FEET);
 		if (!boots.isEmpty()) maxSpeed *= EnchantmentHelper.getEnchantmentLevel(Enchantments.FEATHER_FALLING, boots);
