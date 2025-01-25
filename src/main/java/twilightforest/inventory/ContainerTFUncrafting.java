@@ -35,6 +35,7 @@ import twilightforest.item.recipe.UncraftingShapedRecipe;
 import twilightforest.item.recipe.UncraftingShapelessRecipe;
 import twilightforest.util.TFItemStackUtils;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class ContainerTFUncrafting extends Container {
@@ -70,6 +71,10 @@ public class ContainerTFUncrafting extends Container {
 		STACK_CHECK.add(stack);
 	}
 
+	public static void removeStackFromList(ItemStack stack) {
+		STACK_CHECK.remove(stack);
+	}
+
 	public static void addRecipeToList(String location) {
 		RECIPE_CHECK.add(new ResourceLocation(location));
 	}
@@ -78,9 +83,49 @@ public class ContainerTFUncrafting extends Container {
 		RECIPE_CHECK.add(location);
 	}
 
+	public static void removeRecipeFromList(ResourceLocation location) {
+		RECIPE_CHECK.remove(location);
+	}
+
+	public static void addRecipe(IRecipe recipe) {
+		addRecipe(recipe.getRecipeOutput(), recipe);
+	}
+
 	public static void addRecipe(ItemStack input, IRecipe recipe) {
 		List<IRecipe> list = ADDITIONAL_RECIPES.computeIfAbsent(input, k -> new ArrayList<>(1));
 		list.add(recipe);
+	}
+
+	public static List<IRecipe> removeRecipe(ItemStack input) {
+		return ADDITIONAL_RECIPES.remove(input);
+	}
+
+	@Nullable
+	public static IRecipe removeRecipe(IRecipe recipe) {
+		List<IRecipe> recipes = ADDITIONAL_RECIPES.get(recipe.getRecipeOutput());
+		if (recipes != null) {
+			recipes.remove(recipe);
+			return recipe;
+		}
+		return null;
+	}
+
+	public static List<IRecipe> getAll() {
+		List<IRecipe> recs = new ArrayList<>();
+		for (List<IRecipe> recipes : ADDITIONAL_RECIPES.values()) {
+            recs.addAll(recipes);
+		}
+		return recs;
+	}
+
+	public static List<IRecipe> removeAll() {
+		List<IRecipe> recs = new ArrayList<>();
+		for (List<IRecipe> recipes : ADDITIONAL_RECIPES.values()) {
+            for (IRecipe recipe : recipes) {
+                recs.add(removeRecipe(recipe));
+            }
+		}
+		return recs;
 	}
 
 	public static void addShapedRecipe(ItemStack input, int cost, Object... inputs) {

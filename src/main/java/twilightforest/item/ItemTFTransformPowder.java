@@ -75,6 +75,14 @@ public class ItemTFTransformPowder extends ItemTF {
 		return transformMap.remove(from) != null;
 	}
 
+	public static Map<ResourceLocation, ResourceLocation> getTransformMap() {
+		return transformMap;
+	}
+
+	public static Map<Block, Pair<Predicate<IBlockState>, IBlockState>> getTransformBlockMap() {
+		return transformBlockMap;
+	}
+
 	public static void removeAll() {
 		transformMap.clear();
 	}

@@ -68,6 +68,10 @@ repositories {
         name 'Jared\'s Maven' // Immersive Engineering + Patchouli
         url 'https://blamejared.com/maven'
     }
+    maven {
+        name 'Cleanroom Maven' // GroovyScript
+        url 'https://repo.cleanroommc.com/releases'
+    }
     exclusiveContent {
         forRepository {
             maven {
@@ -95,6 +99,19 @@ dependencies {
     compileOnly "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.700"
     compileOnly rfg.deobf("blusunrize:ImmersiveEngineering:${immersive_engineering_version}")
     compileOnly rfg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+
+    // cleanroom
+    if (project.enable_grs.toBoolean()) {
+        annotationProcessor "org.ow2.asm:asm-debug-all:5.2"
+        annotationProcessor "com.google.guava:guava:32.1.2-jre"
+        annotationProcessor "com.google.code.gson:gson:2.8.9"
+        String mixinBooter = modUtils.enableMixins('zone.rong:mixinbooter:10.0')
+        annotationProcessor (mixinBooter) { transitive = false }
+        runtimeOnly "zone.rong:mixinbooter:10.0"
+
+        implementation("com.cleanroommc:groovyscript:1.2.0") { transitive = false }
+    }
+    else compileOnly("com.cleanroommc:groovyscript:1.2.0") { transitive = false }
 
     // cursemaven
     compileOnly rfg.deobf("curse.maven:forestry-59751:2918418")
