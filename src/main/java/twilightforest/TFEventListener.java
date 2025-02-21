@@ -277,8 +277,7 @@ public class TFEventListener {
 			TFTreasure.stronghold_boss.generateChest(world, pos, false);
 		}
 		else if (variant == BossVariant.UR_GHAST) {
-			if (living instanceof EntityTFUrGhast) return;
-			TFTreasure.darktower_boss.generateChest(world, pos, false);
+			if (!(living instanceof EntityTFUrGhast)) TFTreasure.darktower_boss.generateChest(world, pos, false);
 		}
 		TFFeature feature = getBossFeature(variant);
 		if (feature != null) TFWorld.markStructureConquered(world, pos, feature);

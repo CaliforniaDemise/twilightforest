@@ -128,7 +128,9 @@ public class CommandTF extends CommandBase {
 		CONQUER {
 			@Override
 			protected void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-				changeStructureActivity(sender, true);
+				boolean flag = true;
+				if (args.length > 1) flag = Boolean.parseBoolean(args[1]);
+				changeStructureActivity(sender, flag);
 			}
 		},
 		INFO {
