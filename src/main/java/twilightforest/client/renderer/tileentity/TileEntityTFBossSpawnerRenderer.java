@@ -16,7 +16,7 @@ public class TileEntityTFBossSpawnerRenderer extends TileEntitySpecialRenderer<T
         GlStateManager.popMatrix();
     }
 
-    protected void renderMob(TileEntityTFBossSpawner te, double x, double y, double z, float partialTicks) {
+    public void renderMob(TileEntityTFBossSpawner te, double x, double y, double z, float partialTicks) {
         Entity entity = te.getDisplayEntity();
         if (entity == null) return;
         float f = 0.53125F;

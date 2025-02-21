@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import twilightforest.capabilities.CapabilityList;
 import twilightforest.capabilities.boss.IBossCapability;
+import twilightforest.client.renderer.tileentity.TileEntityTFBossSpawnerRenderer;
 import twilightforest.enums.BossVariant;
 import twilightforest.events.BossEvent;
 
@@ -97,7 +98,7 @@ public abstract class TileEntityTFBossSpawner extends TileEntity implements ITic
 
 	/**
 	 * Get a temporary copy of the creature we're going to summon for display purposes.
-	 * {@link twilightforest.client.renderer.tileentity.TileEntityTFBossSpawnerRenderer#renderMob}
+	 * Used in {@link TileEntityTFBossSpawnerRenderer#renderMob(TileEntityTFBossSpawner, double, double, double, float)}
 	 */
 	@SideOnly(Side.CLIENT)
 	public Entity getDisplayEntity() {
