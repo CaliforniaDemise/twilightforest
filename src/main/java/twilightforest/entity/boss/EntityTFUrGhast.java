@@ -28,6 +28,7 @@ import twilightforest.TwilightForestMod;
 import twilightforest.block.BlockTFBossSpawner;
 import twilightforest.block.BlockTFTowerDevice;
 import twilightforest.block.TFBlocks;
+import twilightforest.capabilities.CapabilityList;
 import twilightforest.capabilities.boss.IBossCapability;
 import twilightforest.client.particle.TFParticleType;
 import twilightforest.entity.EntityTFMiniGhast;
@@ -182,6 +183,14 @@ public class EntityTFUrGhast extends EntityTFTowerGhast {
 	@Override
 	protected boolean canDespawn() {
 		return false;
+	}
+
+	@Override
+	protected void despawnEntity() {
+		if (world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			if (hasHome()) world.setBlockState(getHomePosition(), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.UR_GHAST));
+			this.setDead();
+		} else super.despawnEntity();
 	}
 
 	@Override

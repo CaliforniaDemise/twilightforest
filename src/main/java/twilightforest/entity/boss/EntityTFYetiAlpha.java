@@ -337,6 +337,14 @@ public class EntityTFYetiAlpha extends EntityMob implements IRangedAttackMob, IH
 		return false;
 	}
 
+	@Override
+	protected void despawnEntity() {
+		if (world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			if (hasHome()) world.setBlockState(getHomePosition(), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.ALPHA_YETI));
+			this.setDead();
+		} else super.despawnEntity();
+	}
+
 	public boolean canRampage() {
 		return this.canRampage;
 	}

@@ -127,6 +127,15 @@ public class EntityTFKnightPhantom extends EntityFlying implements IMob {
 	}
 
 	@Override
+	protected void despawnEntity() {
+		if (world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			System.out.println(this.hasHome() + "  Num: "+ this.getNumber());
+			if (hasHome() && getNumber() == 0) world.setBlockState(getHomePosition(), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.KNIGHT_PHANTOM));
+			this.setDead();
+		} else super.despawnEntity();
+	}
+
+	@Override
 	public boolean isEntityInvulnerable(DamageSource src) {
 		return src == DamageSource.IN_WALL || super.isEntityInvulnerable(src);
 	}

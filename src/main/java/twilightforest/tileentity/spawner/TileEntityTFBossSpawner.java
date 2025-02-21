@@ -125,7 +125,8 @@ public abstract class TileEntityTFBossSpawner extends TileEntity implements ITic
 		EntityLivingBase living = (EntityLivingBase) EntityList.createEntityByIDFromName(mobID, world);
 		BossEvent.Construction event = new BossEvent.Construction(this.world, this.pos, this.world.getBlockState(this.pos), this, living);
 		MinecraftForge.EVENT_BUS.post(event);
-		living = event.getModifiedBoss();
+		if (event.getModifiedBoss() != null) living = event.getModifiedBoss();
+		else return living;
 		if (living == null) return null;
 		if (!this.world.isRemote) {
 			IBossCapability capability = living.getCapability(CapabilityList.BOSS, null);

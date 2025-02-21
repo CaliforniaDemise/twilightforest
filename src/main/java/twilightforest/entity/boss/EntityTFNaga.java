@@ -96,6 +96,19 @@ public class EntityTFNaga extends EntityMob implements IEntityMultiPart {
 		IBossCapability.initBoss(this, BossVariant.NAGA);
 	}
 
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
+
+	@Override
+	protected void despawnEntity() {
+		if (world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			if (hasHome()) world.setBlockState(getHomePosition(), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.NAGA));
+			this.setDead();
+		} else super.despawnEntity();
+	}
+
 	public boolean isDazed() {
 		return dataManager.get(DATA_DAZE);
 	}
@@ -120,11 +133,6 @@ public class EntityTFNaga extends EntityMob implements IEntityMultiPart {
 	public void setCustomNameTag(String name) {
 		super.setCustomNameTag(name);
 		this.bossInfo.setName(this.getDisplayName());
-	}
-
-	@Override
-	protected boolean canDespawn() {
-		return false;
 	}
 
 	@Override

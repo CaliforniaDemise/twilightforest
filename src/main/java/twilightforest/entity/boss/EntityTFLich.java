@@ -157,6 +157,14 @@ public class EntityTFLich extends EntityMob {
 		return false;
 	}
 
+	@Override
+	protected void despawnEntity() {
+		if (world.getDifficulty() == EnumDifficulty.PEACEFUL && !isShadowClone()) {
+			if (hasHome()) world.setBlockState(getHomePosition(), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.LICH));
+			this.setDead();
+		} else super.despawnEntity();
+	}
+
 	/**
 	 * What phase of the fight are we on?
 	 * <p>

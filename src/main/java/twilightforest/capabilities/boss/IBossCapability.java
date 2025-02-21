@@ -19,9 +19,9 @@ public interface IBossCapability extends INBTSerializable<NBTTagCompound> {
     BlockPos getHomePos();
 
     default BlockPos getHomePos(EntityLivingBase entity) {
-        BlockPos position = entity instanceof EntityCreature && this.getHomePos() == BlockPos.ORIGIN ? ((EntityCreature) entity).getHomePosition() : this.getHomePos();
-        if (position == null) position = BlockPos.ORIGIN;
-        return position;
+        BlockPos pos = entity instanceof EntityCreature && this.getHomePos() == null ? ((EntityCreature) entity).getHomePosition() : this.getHomePos();
+        if (pos == null) return entity.getPosition();
+        return pos;
     }
 
     default boolean isBoss() {

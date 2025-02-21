@@ -16,8 +16,6 @@ public class TileEntityTFKnightPhantomsSpawner extends TileEntityTFBossSpawner {
 
 	private static final int COUNT = 6;
 
-	private int spawned = 0;
-
 	public TileEntityTFKnightPhantomsSpawner() {
 		super(EntityList.getKey(EntityTFKnightPhantom.class), BossVariant.KNIGHT_PHANTOM);
 	}
@@ -30,9 +28,11 @@ public class TileEntityTFKnightPhantomsSpawner extends TileEntityTFBossSpawner {
 
 	@Override
 	protected boolean spawnMyBoss(EntityLivingBase living) {
+		int spawned = 0;
 		for (int i = spawned; i < COUNT; i++) {
 			// create creature
-			EntityLiving myCreature = (EntityLiving) living;
+			EntityLivingBase myCreature = this.makeMyCreature();
+			if (myCreature == null) continue;
 
 			float angle = (360F / COUNT) * i;
 			final float distance = 4F;
@@ -42,16 +42,16 @@ public class TileEntityTFKnightPhantomsSpawner extends TileEntityTFBossSpawner {
 			double rz = pos.getZ() + 0.5D + Math.sin(angle * Math.PI / 180.0D) * distance;
 
 			myCreature.setLocationAndAngles(rx, ry, rz, world.rand.nextFloat() * 360F, 0.0F);
-			myCreature.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(myCreature)), null);
+			if (myCreature instanceof EntityLiving) ((EntityLiving) myCreature).onInitialSpawn(world.getDifficultyForLocation(new BlockPos(myCreature)), null);
 
 			if(i == 5 && world.getDifficulty() == EnumDifficulty.HARD){
-				myCreature.setItemStackToSlot(EntityEquipmentSlot.OFFHAND,new ItemStack(TFItems.knightmetal_shield));
+				myCreature.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(TFItems.knightmetal_shield));
 			}
 
 			// set creature's home to this
 			initializeCreature(myCreature);
 
-			((EntityTFKnightPhantom) myCreature).setNumber(i);
+			if (myCreature instanceof EntityTFKnightPhantom) ((EntityTFKnightPhantom) myCreature).setNumber(i);
 
 			// spawn it
 			if (world.spawnEntity(myCreature)) {
