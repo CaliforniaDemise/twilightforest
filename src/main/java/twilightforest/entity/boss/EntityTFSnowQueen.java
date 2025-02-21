@@ -245,18 +245,6 @@ public class EntityTFSnowQueen extends EntityMob implements IEntityMultiPart, IB
 		return false;
 	}
 
-	@Override
-	protected void despawnEntity() {
-		if (world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			if (hasHome()) {
-				world.setBlockState(getHomePosition(), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.SNOW_QUEEN));
-			}
-			setDead();
-		} else {
-			super.despawnEntity();
-		}
-	}
-
 	private void applyShieldCollisions(Entity collider) {
 		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(collider, collider.getEntityBoundingBox().grow(-0.2F, -0.2F, -0.2F));
 

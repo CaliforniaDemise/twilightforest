@@ -53,7 +53,7 @@ UncraftingTable.addRecipeToList("minecraft:furnace");
     IWorld             |  world   - The world spawner is in. See https://docs.blamejared.com/1.12/en/Vanilla/World/IWorld for more information.
     IBlockPos          |  pos     - Position of the spawner. See https://docs.blamejared.com/1.12/en/Vanilla/World/IBlockPos for more information.
     string             |  variant - The boss type spawner will spawn by default. Variants are listed below.
-    IEntityLivingBase  |  boss    - The boss spawner will spawn by default. See https://docs.blamejared.com/1.12/en/Vanilla/Entities/IEntityLivingBase for more information.
+    IEntityLiving      |  boss    - The boss spawner will spawn by default. See https://docs.blamejared.com/1.12/en/Vanilla/Entities/IEntityLiving for more information.
 
     None of them are mutable.
 
@@ -77,7 +77,7 @@ UncraftingTable.addRecipeToList("minecraft:furnace");
     This means variables of IBossEvent are included in this event.
 
     This event also includes this method:
-    setBoss(IEntityLivingBase living) | Sets boss to spawn. Even after setting using this method, boss getter will still going to return the default boss.
+    setBoss(IEntityLiving living) | Sets boss to spawn. Even after setting using this method, boss getter will still going to return the default boss.
 */
 // Example: Spawn sheep instead of naga
 events.onBossConstruction(function (event as mods.twilightforest.event.BossConstructionEvent)) {
@@ -99,7 +99,7 @@ events.onBossConstruction(function (event as mods.twilightforest.event.BossConst
         default: It will spawn the boss if default check passes
         deny: It will not spawn the boss even if default check passes.
 */
-// Entirely disables boss spawn.
+// Example: Entirely disables boss spawn.
 events.onBossSpawn(function (event as mods.twilightforest.event.BossConstructionEvent)) {
     event.setResult("deny");
 }
@@ -114,6 +114,6 @@ events.onBossSpawn(function (event as mods.twilightforest.event.BossConstruction
      This event is IEventCancellable. See https://docs.blamejared.com/1.12/en/Vanilla/Events/Events/IEventCancelable for more information.
      If cancelled, it will not grant achievements and if it's Ur Ghast or Phantom Knight it will not generate loot chests.
 */
-// Does absolutely nothing. You can add gamestage stages or grant more advancements for example.
+// Example: Does absolutely nothing. You can add gamestage stages or grant more advancements for example.
 events.onBossDeath(function (event as mods.twilightforest.event.BossDeathEvent)) {
 }

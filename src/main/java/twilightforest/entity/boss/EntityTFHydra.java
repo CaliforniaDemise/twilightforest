@@ -119,21 +119,6 @@ public class EntityTFHydra extends EntityLiving implements IEntityMultiPart, IMo
 		this.bossInfo.removePlayer(player);
 	}
 
-	@Override
-	protected void despawnEntity() {
-		if (world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			world.setBlockState(getPosition().add(0, 2, 0), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.HYDRA));
-			setDead();
-			for (HydraHeadContainer container : hc) {
-				if (container.headEntity != null) {
-					container.headEntity.setDead();
-				}
-			}
-		} else {
-			super.despawnEntity();
-		}
-	}
-
 	// [Vanilla Copy] from EntityLivingBase. Hydra doesn't like the one from EntityLiving for whatever reason
 	@Override
 	protected float updateDistance(float p_110146_1_, float p_110146_2_)

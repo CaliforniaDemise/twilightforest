@@ -1,6 +1,7 @@
 package twilightforest.events;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -85,6 +86,10 @@ public abstract class BossEvent extends Event {
          **/
         public void setBoss(EntityLivingBase boss) {
             this.boss = boss;
+        }
+
+        public void setBoss(Entity boss) {
+            if (boss instanceof EntityLivingBase) this.boss = (EntityLivingBase) boss;
         }
     }
 

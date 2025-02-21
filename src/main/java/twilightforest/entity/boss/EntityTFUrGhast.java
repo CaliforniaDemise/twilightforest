@@ -185,18 +185,6 @@ public class EntityTFUrGhast extends EntityTFTowerGhast {
 	}
 
 	@Override
-	protected void despawnEntity() {
-		if (world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			if (hasHome()) {
-				world.setBlockState(getHomePosition(), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.UR_GHAST));
-			}
-			setDead();
-		} else {
-			super.despawnEntity();
-		}
-	}
-
-	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 

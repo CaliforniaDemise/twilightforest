@@ -45,6 +45,7 @@ import twilightforest.entity.finalcastle.EntityTFCastleGuardian;
 import twilightforest.entity.passive.*;
 import twilightforest.tileentity.TileEntityTFTrophy;
 import twilightforest.tileentity.critters.*;
+import twilightforest.tileentity.spawner.TileEntityTFBossSpawner;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -163,6 +164,7 @@ public class TFClientProxy extends TFCommonProxy {
 		// tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTFFireflyTicking.class, new TileEntityTFFireflyRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTFCicadaTicking.class, new TileEntityTFCicadaRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTFBossSpawner.class, new TileEntityTFBossSpawnerRenderer());
 //		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTFNagaSpawner.class, new TileEntityMobSpawnerRenderer());
 //		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTFLichSpawner.class, new TileEntityMobSpawnerRenderer());
 //		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTFHydraSpawner.class, new TileEntityMobSpawnerRenderer());

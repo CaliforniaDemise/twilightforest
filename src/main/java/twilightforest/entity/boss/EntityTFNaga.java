@@ -706,18 +706,6 @@ public class EntityTFNaga extends EntityMob implements IEntityMultiPart {
 	}
 
 	@Override
-	protected void despawnEntity() {
-		if (world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			if (hasHome()) {
-				world.setBlockState(getHomePosition(), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.NAGA));
-			}
-			setDead();
-		} else {
-			super.despawnEntity();
-		}
-	}
-
-	@Override
 	public void setDead() {
 		super.setDead();
 		for (EntityTFNagaSegment seg : bodySegments) {
