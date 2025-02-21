@@ -7,5 +7,6 @@ import twilightforest.client.ModelRegisterCallback;
 public class ItemTFDoor extends ItemDoor implements ModelRegisterCallback {
     public ItemTFDoor(Block block) {
         super(block);
+        this.setCreativeTab(TFItems.creativeTab);
     }
 }
