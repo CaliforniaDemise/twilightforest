@@ -30,6 +30,7 @@ import twilightforest.TFSounds;
 import twilightforest.TwilightForestMod;
 import twilightforest.block.BlockTFBossSpawner;
 import twilightforest.block.TFBlocks;
+import twilightforest.capabilities.CapabilityList;
 import twilightforest.capabilities.boss.IBossCapability;
 import twilightforest.enums.BossVariant;
 import twilightforest.util.EntityUtil;
@@ -711,10 +712,13 @@ public class EntityTFHydra extends EntityLiving implements IEntityMultiPart, IMo
 	@Override
 	protected void despawnEntity() {
 		if (world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			world.setBlockState(getPosition().add(0, 2, 0), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.HYDRA));
-			this.setDead();
-			for (HydraHeadContainer container : hc) {
-				if (container.headEntity != null) container.headEntity.setDead();
+			IBossCapability capability = this.getCapability(CapabilityList.BOSS, null);
+			if (capability != null && capability.getHomePos(this) != null) {
+				world.setBlockState(capability.getHomePos(this), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.HYDRA));
+				this.setDead();
+				for (HydraHeadContainer container : hc) {
+					if (container.headEntity != null) container.headEntity.setDead();
+				}
 			}
 		} else super.despawnEntity();
 	}

@@ -153,6 +153,7 @@ tile.twilightforest.BossSpawner.4.name=Knight Phantoms Spawner
 tile.twilightforest.BossSpawner.5.name=Snow Queen Spawner
 tile.twilightforest.BossSpawner.6.name=Minoshroom Spawner
 tile.twilightforest.BossSpawner.7.name=Alpha Yeti Spawner
+tile.twilightforest.BossSpawner.9.name=Final Boss Spawner
 tile.twilightforest.FireflyJar.name=Firefly Jar
 tile.twilightforest.Plant.0.name=Moss Patch
 tile.twilightforest.Plant.1.name=Mayapple
@@ -323,6 +324,8 @@ tile.twilightforest.EtchedNagastoneWeathered.name=Ruined Etched Nagastone
 tile.twilightforest.NagastonePillarWeathered.name=Ruined Nagastone Pillar
 tile.twilightforest.NagastoneStairsWeathered.0.name=Weathered Nagastone Stairs (Left)
 tile.twilightforest.NagastoneStairsWeathered.8.name=Weathered Nagastone Stairs (Right)
+tile.twilightforest.StonePillar.name=Stone Twist
+tile.twilightforest.StonePillarThin.name=Thin Stone Twist
 tile.twilightforest.IronLadder.name=Iron Ladder
 tile.twilightforest.TerrorCottaCircle.name=Terrorcotta (Circular)
 tile.twilightforest.TerrorCottaDiagonal.name=Terrorcotta (Diagonal)
@@ -630,6 +633,8 @@ entity.twilightforest.rising_zombie.name=Zombie
 entity.twilightforest.apocalypse_cube.name=Apocalypse Cube [NYI]
 entity.twilightforest.adherent.name=Adherent [NYI]
 entity.twilightforest.castle_guardian.name=Castle Guardian [NYI]
+entity.twilightforest.harbinger_cube.name=Harbinger Cube [NYI]
+entity.twilightforest.roving_cube.name=Roving Cube [NYI]
 
 twilightforest.effect.frosted=Frosted
 
