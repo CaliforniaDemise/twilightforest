@@ -33,6 +33,7 @@ import twilightforest.block.TFBlocks;
 import twilightforest.item.recipe.UncraftingRecipe;
 import twilightforest.item.recipe.UncraftingShapedRecipe;
 import twilightforest.item.recipe.UncraftingShapelessRecipe;
+import twilightforest.util.ItemStackSet;
 import twilightforest.util.TFItemStackUtils;
 
 import javax.annotation.Nullable;
@@ -59,8 +60,7 @@ public class ContainerTFUncrafting extends Container {
 		}
 	};
 
-	private static final Set<ItemStack> STACK_CHECK = initStackSet();
-	private static boolean shouldReload = false;
+	private static final ItemStackSet STACK_CHECK = new ItemStackSet.Ore("uncraftingList");
 	private static final Set<ResourceLocation> RECIPE_CHECK = TFConfig.initializeUncraftingList();
 	private static final boolean IS_WHITELIST = TFConfig.whitelistUncrafting;
 
@@ -69,7 +69,7 @@ public class ContainerTFUncrafting extends Container {
 	private static IRecipe currRecipe;
 
 	public static void reloadStackSet() {
-		shouldReload = true;
+		STACK_CHECK.setReload();
 	}
 
 	private static Set<ItemStack> initStackSet() {
@@ -388,11 +388,6 @@ public class ContainerTFUncrafting extends Container {
 	}
 
 	public static boolean isAllowed(ItemStack stack) {
-		if (shouldReload) {
-			STACK_CHECK.clear();
-			STACK_CHECK.addAll(OreDictionary.getOres("uncraftingList"));
-			shouldReload = false;
-		}
 		return !STACK_CHECK.contains(stack);
 	}
 

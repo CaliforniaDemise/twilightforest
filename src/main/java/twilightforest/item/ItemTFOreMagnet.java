@@ -6,9 +6,11 @@ import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -17,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,6 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import twilightforest.block.BlockTFRoots;
 import twilightforest.block.TFBlocks;
 import twilightforest.enums.RootVariant;
+import twilightforest.util.ItemStackSet;
 import twilightforest.world.feature.TFGenerator;
 
 import javax.annotation.Nonnull;
@@ -34,6 +38,7 @@ import java.util.Set;
 public class ItemTFOreMagnet extends ItemTF {
 
 	private static final float WIGGLE = 10F;
+	private static final ItemStackSet ORES = new ItemStackSet.Ore("blockMagnetable");
 
 	protected ItemTFOreMagnet() {
 		this.maxStackSize = 1;
@@ -133,10 +138,11 @@ public class ItemTFOreMagnet extends ItemTF {
 		Vec3d lookVec = getOffsetLook(living, yawOffset, pitchOffset);
 		Vec3d destVec = srcVec.add(lookVec.x * range, lookVec.y * range, lookVec.z * range);
 
-		return doMagnet(world, new BlockPos(srcVec), new BlockPos(destVec));
+		RayTraceResult result = new RayTraceResult(lookVec, EnumFacing.UP, new BlockPos(destVec));
+		return doMagnet(world, living instanceof EntityPlayer ? (EntityPlayer) living : null, result, new BlockPos(srcVec), new BlockPos(destVec));
 	}
 
-	public static int doMagnet(World world, BlockPos usePos, BlockPos destPos) {
+	public static int doMagnet(World world, @Nullable EntityPlayer player, @Nullable RayTraceResult result, BlockPos usePos, BlockPos destPos) {
 		int blocksMoved = 0;
 		// get blocks in line from src to dest
 		BlockPos[] lineArray = TFGenerator.getBresehnamArrays(usePos, destPos);
@@ -160,7 +166,7 @@ public class ItemTFOreMagnet extends ItemTF {
 					basePos = coord;
 				}
 				// This ordering is so that the base pos is found first before we pull ores - pushing ores away is a baaaaad idea!
-			} else if (foundPos == null && searchState.getBlock() != Blocks.AIR && isOre(searchState) && (world.getTileEntity(coord) == null)) {
+			} else if (foundPos == null && searchState.getBlock() != Blocks.AIR && isOre(world, player, coord, result, searchState) && (world.getTileEntity(coord) == null)) {
                 foundState = searchState;
                 foundPos = coord;
             }
@@ -208,27 +214,15 @@ public class ItemTFOreMagnet extends ItemTF {
 
 	private static boolean isReplaceable(World world, IBlockState state, BlockPos pos) {
         Block block = state.getBlock();
-
-	    if (block == Blocks.DIRT
-                || block == Blocks.GRASS
-                || block == Blocks.GRAVEL
-                || (block != Blocks.AIR && block.isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.STONE)))) {
-			return true;
-		}
-
-		return false;
-	}
+        return block != Blocks.AIR && block.isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.STONE));
+    }
 
 	private static boolean isNetherReplaceable(World world, IBlockState state, BlockPos pos) {
 		if (state.getBlock() == Blocks.NETHERRACK) {
 			return true;
 		}
-		if (state.getBlock() != Blocks.AIR && state.getBlock().isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.NETHERRACK))) {
-			return true;
-		}
-
-		return false;
-	}
+        return state.getBlock() != Blocks.AIR && state.getBlock().isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.NETHERRACK));
+    }
 
 	private static boolean findVein(World world, BlockPos here, IBlockState oreState, Set<BlockPos> veinBlocks) {
 		// is this already on the list?
@@ -256,25 +250,25 @@ public class ItemTFOreMagnet extends ItemTF {
 		}
 	}
 
-	private static boolean isOre(IBlockState state) {
-        Block block = state.getBlock();
-
-		if (block == Blocks.COAL_ORE) return false;
-
-		if (block == Blocks.IRON_ORE
-                || block == Blocks.DIAMOND_ORE
-                || block == Blocks.EMERALD_ORE
-                || block == Blocks.GOLD_ORE
-                || block == Blocks.LAPIS_ORE
-                || block == Blocks.REDSTONE_ORE
-                || block == Blocks.LIT_REDSTONE_ORE
-                || block == Blocks.QUARTZ_ORE
-                || state == TFBlocks.root.getDefaultState().withProperty(BlockTFRoots.VARIANT, RootVariant.LIVEROOT)
-                // todo 1.9 oh god
-				// National treasure -Drullkus
-                || state.getBlock().getRegistryName().getPath().contains("ore"))
-		    return true;
-
-		return false;
+	public static void reloadOres() {
+		ORES.setReload();
 	}
+
+	private static boolean isOre(World world, @Nullable EntityPlayer player, BlockPos pos, @Nullable RayTraceResult result, IBlockState state) {
+		if (player == null || result == null) {
+			Item item = Item.getItemFromBlock(state.getBlock());
+			if (item == Items.AIR) return false;
+			int metadata = state.getBlock().getMetaFromState(state);
+			ItemStack stack = new ItemStack(item, 1, metadata);
+			return ORES.contains(stack);
+		}
+		System.out.println("1");
+        Block block = state.getBlock();
+		ItemStack pickBlock = block.getPickBlock(state, result, world, pos, player);
+		System.out.println(pickBlock + "\n");
+		if (pickBlock.isEmpty()) return false;
+        ORES.forEach(System.out::println);
+		return ORES.contains(pickBlock);
+    }
+
 }

@@ -40,6 +40,11 @@ mods.twilightforest.uncrafting.shapelessBuilder().input(item('minecraft:redstone
 // mods.twilightforest.uncrafting.addItemToList(item('minecraft:planks') USE ORE DICTS INSTEAD
 ore("uncraftingList").add(item('minecraft:planks'))
 
+// Adds Clay to blocks Ore Magnet will pull.
+// Note: By default it has Iron Ore, Diamond Ore, Emerald Ore, Lapis Ore, Redstone Ore, Quartz Ore and Liveroots.
+// You can remove them from this ore dictionary to make them unpullable.
+ore("blockMagnetable").add(item('minecraft:clay'))
+
 // Removes the entire Oak Planks recipe from Uncrafting Table
 mods.twilightforest.uncrafting.addRecipeToList('minecraft:oak_planks')
 

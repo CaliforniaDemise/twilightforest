@@ -171,7 +171,7 @@ public class BlockTFMagicLogSpecial extends BlockTFMagicLog {
 
 		//world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "random.click", 0.1F, 0.5F);
 
-		int moved = ItemTFOreMagnet.doMagnet(world, pos, dPos);
+		int moved = ItemTFOreMagnet.doMagnet(world, null, null, pos, dPos);
 
 		if (moved > 0) {
 			world.playSound(null, pos, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.BLOCKS, 0.1F, 1.0F);

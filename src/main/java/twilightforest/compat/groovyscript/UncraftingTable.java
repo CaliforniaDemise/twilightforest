@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 import twilightforest.TwilightForestMod;
 import twilightforest.inventory.ContainerTFUncrafting;
+import twilightforest.item.ItemTFOreMagnet;
 import twilightforest.item.recipe.UncraftingRecipe;
 import twilightforest.item.recipe.UncraftingShapedRecipe;
 import twilightforest.item.recipe.UncraftingShapelessRecipe;
@@ -43,6 +44,7 @@ public class UncraftingTable extends VirtualizedRegistry<IRecipe> {
         this.recipeList.forEach(ContainerTFUncrafting::removeRecipeFromList);
         this.recipeList = new ArrayList<>();
         ContainerTFUncrafting.reloadStackSet();
+        ItemTFOreMagnet.reloadOres();
     }
 
     public UncraftingTable() {

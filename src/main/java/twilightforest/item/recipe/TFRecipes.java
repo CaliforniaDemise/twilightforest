@@ -1,5 +1,6 @@
 package twilightforest.item.recipe;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -9,8 +10,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import twilightforest.TwilightForestMod;
+import twilightforest.block.BlockTFRoots;
 import twilightforest.block.TFBlocks;
 import twilightforest.enums.CompressedVariant;
+import twilightforest.enums.RootVariant;
 import twilightforest.item.TFItems;
 
 @Mod.EventBusSubscriber(modid = TwilightForestMod.ID)
@@ -108,6 +111,15 @@ public class TFRecipes {
 		OreDictionary.registerOre("fenceWood"    , new ItemStack(TFBlocks.sort_fence          ));
 		OreDictionary.registerOre("fenceGateWood", new ItemStack(TFBlocks.sort_gate           ));
 		//OreDictionary.registerOre("plateWood"    , new ItemStack(TFBlocks.sort_plate          ));
+
+		OreDictionary.registerOre("blockMagnetable", new ItemStack(Blocks.IRON_ORE));
+		OreDictionary.registerOre("blockMagnetable", new ItemStack(Blocks.DIAMOND_ORE));
+		OreDictionary.registerOre("blockMagnetable", new ItemStack(Blocks.EMERALD_ORE));
+		OreDictionary.registerOre("blockMagnetable", new ItemStack(Blocks.GOLD_ORE));
+		OreDictionary.registerOre("blockMagnetable", new ItemStack(Blocks.LAPIS_ORE));
+		OreDictionary.registerOre("blockMagnetable", new ItemStack(Blocks.REDSTONE_ORE));
+		OreDictionary.registerOre("blockMagnetable", new ItemStack(Blocks.QUARTZ_ORE));
+		OreDictionary.registerOre("blockMagnetable", new ItemStack(TFBlocks.root, 1, 1));
 
 		// recipe sorter
 		// RecipeSorter.register(TwilightForestMod.ID + ":mapcloning", TFMapCloningRecipe.class, SHAPELESS, "after:minecraft:shapeless");
