@@ -185,7 +185,7 @@ public class BlockTFPortal extends BlockBreakable {
 						isPoolProbablyEnclosed = recursivelyValidatePortal(world, positionCheck, blocksChecked, portalSize, requiredState);
 					}
 
-				} else if (isGrassOrDirt(state) && isNatureBlock(world, upPos, world.getBlockState(upPos)) || state.getBlock() == TFBlocks.uberous_soil) {
+				} else if (isNatureBlock(world, upPos, world.getBlockState(upPos)) || state.getBlock() == TFBlocks.uberous_soil) {
 					blocksChecked.put(positionCheck, false);
 
 				} else return false;
@@ -204,11 +204,6 @@ public class BlockTFPortal extends BlockBreakable {
 		return false;
 	}
 
-	private static boolean isGrassOrDirt(IBlockState state) {
-		Material mat = state.getMaterial();
-		return state.isFullCube() && (mat == Material.GRASS || mat == Material.GROUND);
-	}
-
 	@Override
 	@Deprecated
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block notUsed, BlockPos fromPos) {
@@ -216,10 +211,10 @@ public class BlockTFPortal extends BlockBreakable {
 
 		for (EnumFacing facing : EnumFacing.HORIZONTALS) {
 			if (!good) break;
-
-			IBlockState neighboringState = world.getBlockState(pos.offset(facing));
-
-			good = isGrassOrDirt(neighboringState) || neighboringState == state;
+			BlockPos facingPos = pos.offset(facing);
+			IBlockState neighboringState = world.getBlockState(facingPos);
+			IBlockState plantState = world.getBlockState(facingPos.up());
+			good = plantState.getBlock() instanceof IPlantable && neighboringState.getBlock().canSustainPlant(neighboringState, world, facingPos, EnumFacing.UP, (IPlantable) plantState.getBlock()) || neighboringState == state;
 		}
 
 		if (!good) {
