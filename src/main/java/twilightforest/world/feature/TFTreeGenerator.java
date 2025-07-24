@@ -34,6 +34,11 @@ public abstract class TFTreeGenerator extends WorldGenAbstractTree implements IB
 	}
 
 	@Override
+	protected void setBlockAndNotifyAdequately(World worldIn, BlockPos pos, IBlockState state) {
+		if (worldIn.isAirBlock(pos) || state.getBlock() == TFBlocks.magic_log_core) super.setBlockAndNotifyAdequately(worldIn, pos, state);
+	}
+
+	@Override
 	public final void setBlockAndNotify(World world, BlockPos pos, IBlockState state) {
 		setBlockAndNotifyAdequately(world, pos, state);
 	}
