@@ -25,6 +25,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -175,6 +177,7 @@ public class BlockTFPortal extends BlockBreakable {
 
 			if (!blocksChecked.containsKey(positionCheck)) {
 				IBlockState state = world.getBlockState(positionCheck);
+				BlockPos upPos = positionCheck.up();
 
 				if (state == requiredState && world.getBlockState(positionCheck.down()).isFullCube()) {
 					blocksChecked.put(positionCheck, true);
@@ -182,7 +185,7 @@ public class BlockTFPortal extends BlockBreakable {
 						isPoolProbablyEnclosed = recursivelyValidatePortal(world, positionCheck, blocksChecked, portalSize, requiredState);
 					}
 
-				} else if (isGrassOrDirt(state) && isNatureBlock(world.getBlockState(positionCheck.up())) || state.getBlock() == TFBlocks.uberous_soil) {
+				} else if (isGrassOrDirt(state) && isNatureBlock(world, upPos, world.getBlockState(upPos)) || state.getBlock() == TFBlocks.uberous_soil) {
 					blocksChecked.put(positionCheck, false);
 
 				} else return false;
@@ -192,9 +195,13 @@ public class BlockTFPortal extends BlockBreakable {
 		return isPoolProbablyEnclosed;
 	}
 
-	private static boolean isNatureBlock(IBlockState state) {
+	private static boolean isNatureBlock(World world, BlockPos pos, IBlockState state) {
 		Material mat = state.getMaterial();
-		return mat == Material.PLANTS || mat == Material.VINE || mat == Material.LEAVES;
+		boolean material = mat == Material.PLANTS || mat == Material.VINE || mat == Material.LEAVES;
+		if (material) return true;
+		IPlantable plant = state.getBlock() instanceof IPlantable ? (IPlantable) state.getBlock() : null;
+		if (plant != null) return plant.getPlantType(world, pos) != EnumPlantType.Crop;
+		return false;
 	}
 
 	private static boolean isGrassOrDirt(IBlockState state) {
