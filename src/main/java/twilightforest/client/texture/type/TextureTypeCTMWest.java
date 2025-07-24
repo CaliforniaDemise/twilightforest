@@ -32,7 +32,7 @@ public class TextureTypeCTMWest extends TextureTypeCTM {
 			protected CTMLogic createCTM(@Nonnull IBlockState state) {
 				IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state);
 				if (model instanceof AbstractCTMBakedModel) {
-					return CTMLogicWest.getInstance().ignoreStates(((AbstractCTMBakedModel) model).getModel().ignoreStates());
+//					return CTMLogicWest.getInstance().ignoreStates(((AbstractCTMBakedModel) model).getModel().ignoreStates());
 				}
 				return CTMLogicWest.getInstance();
 			}
