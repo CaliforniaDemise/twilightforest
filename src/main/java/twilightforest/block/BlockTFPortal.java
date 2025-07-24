@@ -185,7 +185,7 @@ public class BlockTFPortal extends BlockBreakable {
 						isPoolProbablyEnclosed = recursivelyValidatePortal(world, positionCheck, blocksChecked, portalSize, requiredState);
 					}
 
-				} else if (isNatureBlock(world, upPos, world.getBlockState(upPos)) || state.getBlock() == TFBlocks.uberous_soil) {
+				} else if (state.getBlock() == TFBlocks.uberous_soil || isNatureBlock(world.getBlockState(upPos))) {
 					blocksChecked.put(positionCheck, false);
 
 				} else return false;
@@ -195,13 +195,11 @@ public class BlockTFPortal extends BlockBreakable {
 		return isPoolProbablyEnclosed;
 	}
 
-	private static boolean isNatureBlock(World world, BlockPos pos, IBlockState state) {
+	private static boolean isNatureBlock(IBlockState state) {
 		Material mat = state.getMaterial();
 		boolean material = mat == Material.PLANTS || mat == Material.VINE || mat == Material.LEAVES;
 		if (material) return true;
-		IPlantable plant = state.getBlock() instanceof IPlantable ? (IPlantable) state.getBlock() : null;
-		if (plant != null) return plant.getPlantType(world, pos) != EnumPlantType.Crop;
-		return false;
+		return state.getBlock() instanceof IPlantable;
 	}
 
 	@Override
