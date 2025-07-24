@@ -12,6 +12,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.oredict.OreDictionary;
 import twilightforest.TwilightForestMod;
 import twilightforest.inventory.ContainerTFUncrafting;
 import twilightforest.item.recipe.UncraftingRecipe;
@@ -26,7 +27,6 @@ import java.util.List;
 public class UncraftingTable extends VirtualizedRegistry<IRecipe> {
 
     private List<ResourceLocation> recipeList = new ArrayList<>();
-    private List<ItemStack> stackList = new ArrayList<>();
 
     public ShapedRecipe shapedBuilder() {
         return new ShapedRecipe();
@@ -41,19 +41,18 @@ public class UncraftingTable extends VirtualizedRegistry<IRecipe> {
         removeScripted().forEach(recipe -> ContainerTFUncrafting.removeRecipe(recipe.getRecipeOutput()));
         restoreFromBackup().forEach(ContainerTFUncrafting::addRecipe);
         this.recipeList.forEach(ContainerTFUncrafting::removeRecipeFromList);
-        this.stackList.forEach(ContainerTFUncrafting::removeStackFromList);
         this.recipeList = new ArrayList<>();
-        this.stackList = new ArrayList<>();
+        ContainerTFUncrafting.reloadStackSet();
     }
 
     public UncraftingTable() {
         super(Lists.newArrayList("uncrafting", "Uncrafting", "uncraftingtable", "uncrafting_table", "UncraftingTable"));
     }
 
+    @Deprecated
     public void addItemToList(IIngredient ingredient) {
         for (ItemStack stack : ingredient.getMatchingStacks()) {
-            ContainerTFUncrafting.addStackToList(stack);
-            this.stackList.add(stack);
+            OreDictionary.registerOre("uncraftingList", stack);
         }
     }
 

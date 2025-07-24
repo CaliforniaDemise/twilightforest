@@ -17,6 +17,7 @@ import twilightforest.item.recipe.UncraftingShapelessRecipe;
 @ZenClass("mods.twilightforest.UncraftingTable")
 public class CTUncraftingTable {
 
+    @Deprecated // Use 'uncraftingList' ore dictionary
     @ZenMethod
     public static void addStackToList(IIngredient ingredient) {
         for (IItemStack stack : ingredient.getItemArray()) {

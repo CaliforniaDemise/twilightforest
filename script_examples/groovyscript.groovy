@@ -35,8 +35,10 @@ mods.twilightforest.uncrafting.shapedBuilder().input(item('minecraft:iron_ingot'
 // Adds Redstone + 2 exp to Stone shapeless recipe
 mods.twilightforest.uncrafting.shapelessBuilder().input(item('minecraft:redstone')).cost(2).outputs([item('minecraft:stone')]).register()
 
-// Removes Oak Planks from items that can be got from Uncrafting Table
-mods.twilightforest.uncrafting.addItemToList(item('minecraft:planks'))
+// Adds Oak Planks to uncrafting blacklist.
+// You can turn list to act like whitelist instead in config.
+// mods.twilightforest.uncrafting.addItemToList(item('minecraft:planks') USE ORE DICTS INSTEAD
+ore("uncraftingList").add(item('minecraft:planks'))
 
 // Removes the entire Oak Planks recipe from Uncrafting Table
 mods.twilightforest.uncrafting.addRecipeToList('minecraft:oak_planks')

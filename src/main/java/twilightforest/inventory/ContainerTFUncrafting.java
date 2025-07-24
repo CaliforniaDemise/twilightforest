@@ -59,13 +59,24 @@ public class ContainerTFUncrafting extends Container {
 		}
 	};
 
-	private static final Set<ItemStack> STACK_CHECK = new ObjectOpenCustomHashSet<>(ITEMSTACK_STRATEGY);
+	private static final Set<ItemStack> STACK_CHECK = initStackSet();
+	private static boolean shouldReload = false;
 	private static final Set<ResourceLocation> RECIPE_CHECK = TFConfig.initializeUncraftingList();
 	private static final boolean IS_WHITELIST = TFConfig.whitelistUncrafting;
 
 	private static final Map<ItemStack, List<IRecipe>> ADDITIONAL_RECIPES = new Object2ObjectOpenCustomHashMap<>(ITEMSTACK_STRATEGY);
 
 	private static IRecipe currRecipe;
+
+	public static void reloadStackSet() {
+		shouldReload = true;
+	}
+
+	private static Set<ItemStack> initStackSet() {
+		Set<ItemStack> set = new ObjectOpenCustomHashSet<>(ITEMSTACK_STRATEGY);
+        set.addAll(OreDictionary.getOres("uncraftingList"));
+		return set;
+	}
 
 	public static void addStackToList(ItemStack stack) {
 		STACK_CHECK.add(stack);
@@ -377,6 +388,11 @@ public class ContainerTFUncrafting extends Container {
 	}
 
 	public static boolean isAllowed(ItemStack stack) {
+		if (shouldReload) {
+			STACK_CHECK.clear();
+			STACK_CHECK.addAll(OreDictionary.getOres("uncraftingList"));
+			shouldReload = false;
+		}
 		return !STACK_CHECK.contains(stack);
 	}
 

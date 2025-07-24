@@ -40,7 +40,9 @@ UncraftingTable.addShaped(<minecraft:stone>, 4, [[<ore:ingotIron>, null, <ore:in
 UncraftingTable.addShapeless(<minecraft:dirt>, 3, [<minecraft:stone>, <minecraft:iron_block>]);
 
 // Adds Diamond to output blacklist.
-UncraftingTable.addStackToList(<ore:gemDiamond>);
+// List can be turned into whitelist in configs
+// UncraftingTable.addStackToList(<ore:gemDiamond>); USE ORE DICTIONARY INSTEAD
+<ore:uncraftingList>.addAll(<ore:gemDiamond>);
 
 // Adds recipe to graylist. The list will be blacklist or whitelist based on 'whitelistUncrafting' value in config.
 UncraftingTable.addRecipeToList("minecraft:furnace");
