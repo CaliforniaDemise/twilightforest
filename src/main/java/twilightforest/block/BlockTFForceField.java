@@ -1,6 +1,7 @@
 package twilightforest.block;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -70,7 +71,7 @@ public class BlockTFForceField extends BlockTFConnectableRotatedPillar implement
 
 	@Override
 	protected boolean canConnectTo(IBlockState state, IBlockState otherState, IBlockAccess world, BlockPos pos, EnumFacing connectTo) {
-		BlockFaceShape blockFaceShape = otherState.getBlockFaceShape(world, pos, connectTo);
+		BlockFaceShape blockFaceShape = otherState.getBlockFaceShape(world, pos.offset(connectTo), connectTo);
 
 		return blockFaceShape == BlockFaceShape.SOLID
 				|| blockFaceShape == BlockFaceShape.MIDDLE_POLE_THIN

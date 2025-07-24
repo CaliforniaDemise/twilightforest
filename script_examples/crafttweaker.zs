@@ -44,6 +44,11 @@ UncraftingTable.addShapeless(<minecraft:dirt>, 3, [<minecraft:stone>, <minecraft
 // UncraftingTable.addStackToList(<ore:gemDiamond>); USE ORE DICTIONARY INSTEAD
 <ore:uncraftingList>.addAll(<ore:gemDiamond>);
 
+// Adds Clay to blocks Ore Magnet will pull.
+// Note: By default it has Iron Ore, Diamond Ore, Emerald Ore, Lapis Ore, Redstone Ore, Quartz Ore and Liveroots.
+// You can remove them from this ore dictionary to make them unpullable.
+<ore:blockMagnetable>.add(<minecraft:clay>);
+
 // Adds recipe to graylist. The list will be blacklist or whitelist based on 'whitelistUncrafting' value in config.
 UncraftingTable.addRecipeToList("minecraft:furnace");
 
