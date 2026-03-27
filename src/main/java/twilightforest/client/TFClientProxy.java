@@ -154,6 +154,8 @@ public class TFClientProxy extends TFCommonProxy {
 		// I guess the hydra gets its own section
 		RenderingRegistry.registerEntityRenderingHandler(EntityTFHydraHead.class, m -> new RenderTFHydraHead(m, new ModelTFHydraHead(), 1.0F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityTFHydraNeck.class, m -> new RenderTFGenericLiving<>(m, new ModelTFHydraNeck(), 1.0F, "hydra4.png"));
+
+		RenderingRegistry.registerEntityRenderingHandler(EntityTFPortalSpawnerItem.class, m -> new RenderTFPortalSpawnerItem(m, Minecraft.getMinecraft().getRenderItem()));
 	}
 
 	@Override

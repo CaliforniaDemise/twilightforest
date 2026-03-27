@@ -6,6 +6,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 
 public abstract class ItemStackSet extends ObjectOpenCustomHashSet<ItemStack> implements ReloadableSet<ItemStack> {
@@ -52,7 +54,17 @@ public abstract class ItemStackSet extends ObjectOpenCustomHashSet<ItemStack> im
         return super.contains(k);
     }
 
-    public static class Ore extends ItemStackSet {
+    public static final class Default extends ItemStackSet {
+
+        public Default(Collection<ItemStack> stacks) {
+            this.addAll(stacks);
+        }
+
+        @Override
+        public void reload() {}
+    }
+
+    public static final class Ore extends ItemStackSet {
 
         private final String ore;
 

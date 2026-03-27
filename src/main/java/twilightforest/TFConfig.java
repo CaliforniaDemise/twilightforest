@@ -16,6 +16,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.oredict.OreDictionary;
+import twilightforest.util.ItemStackSet;
 import twilightforest.world.WorldProviderTwilightForest;
 import twilightforest.world.feature.TFGenCaveStalactite;
 
@@ -453,21 +454,32 @@ public class TFConfig {
 	}
 
 	@Config.Ignore
+	private static Set<ItemStack> portalSpawners;
+
+	@Config.Ignore
 	public static Ingredient portalIngredient;
+
+	public static boolean isPortalSpawner(ItemStack stack) {
+		return portalSpawners.contains(stack);
+	}
 
 	private static void buildPortalIngredient() {
 
-		List<ItemStack> stacks = new ArrayList<>();
-
-		for (String s : portalCreationItems) {
-			parseItemStack(s, OreDictionary.WILDCARD_VALUE).ifPresent(stacks::add);
+		{
+			if (portalCreationItems.length == 0) {
+				ItemStack stack = new ItemStack(Items.DIAMOND);
+				portalSpawners = new ItemStackSet.Default(Collections.singletonList(stack));
+				portalIngredient = Ingredient.fromStacks(stack);
+			}
+			else {
+				List<ItemStack> stacks = new ArrayList<>();
+				for (String s : portalCreationItems) {
+					parseItemStack(s, OreDictionary.WILDCARD_VALUE).ifPresent(stacks::add);
+				}
+				portalSpawners = new ItemStackSet.Default(stacks);
+				portalIngredient = Ingredient.fromStacks(stacks.toArray(new ItemStack[0]));
+			}
 		}
-
-		if (stacks.isEmpty()) {
-			stacks.add(new ItemStack(Items.DIAMOND));
-		}
-
-		portalIngredient = Ingredient.fromStacks(stacks.toArray(new ItemStack[0]));
 	}
 
 	private static Optional<ItemStack> parseItemStack(String string, int defaultMeta) {

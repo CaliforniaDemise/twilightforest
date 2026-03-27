@@ -117,6 +117,8 @@ public class TFEntityNames {
 	public static final ResourceLocation ICE_ARROW = prefix("ice_arrow");
 	public static final ResourceLocation ICE_SNOWBALL = prefix("ice_snowball");
 
+	public static final ResourceLocation PORTAL_SPAWNER_ITEM = prefix("portal_spawner_item");
+
 	private static ResourceLocation prefix(String path) {
 		return new ResourceLocation(TwilightForestMod.ID, path);
 	}

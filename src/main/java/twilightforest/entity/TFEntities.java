@@ -167,5 +167,7 @@ public class TFEntities {
 		helper.registerEntity(TFEntityNames.SLIDER, EntityTFSlideBlock.class, EntityTFSlideBlock::new, 80, 1, true);
 		helper.registerEntity(TFEntityNames.BOGGARD, EntityTFBoggard.class, EntityTFBoggard::new);
 		helper.registerEntity(TFEntityNames.RISING_ZOMBIE, EntityTFRisingZombie.class, EntityTFRisingZombie::new);
+
+		helper.registerEntity(TFEntityNames.PORTAL_SPAWNER_ITEM, EntityTFPortalSpawnerItem.class, EntityTFPortalSpawnerItem::new);
 	}
 }

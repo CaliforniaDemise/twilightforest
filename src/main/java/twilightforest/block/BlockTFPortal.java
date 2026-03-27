@@ -54,7 +54,7 @@ public class BlockTFPortal extends BlockBreakable {
 
 	public BlockTFPortal() {
 		super(Material.PORTAL, false);
-		this.setHardness(-1F);
+		this.setBlockUnbreakable();
 		this.setSoundType(SoundType.GLASS);
 		this.setLightLevel(0.75F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(DISALLOW_RETURN, false));
@@ -211,8 +211,7 @@ public class BlockTFPortal extends BlockBreakable {
 			if (!good) break;
 			BlockPos facingPos = pos.offset(facing);
 			IBlockState neighboringState = world.getBlockState(facingPos);
-			IBlockState plantState = world.getBlockState(facingPos.up());
-			good = plantState.getBlock() instanceof IPlantable && neighboringState.getBlock().canSustainPlant(neighboringState, world, facingPos, EnumFacing.UP, (IPlantable) plantState.getBlock()) || neighboringState == state;
+			good = neighboringState.isSideSolid(world, pos, facing.getOpposite()) || neighboringState.getBlock() == this;
 		}
 
 		if (!good) {
