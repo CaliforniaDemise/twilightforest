@@ -182,48 +182,165 @@ public class BlockTFMagicLogSpecial extends BlockTFMagicLog {
 	 * The sorting tree finds two chests nearby and then attempts to sort a random item.
 	 */
 	private void doSortingTreeEffect(World world, BlockPos pos, Random rand) {
-		for (BlockPos iPos : WorldUtil.getAllAround(pos, 16)) {
-			Chunk chunk = world.getChunk(iPos);
-			if (!chunk.isLoaded()) continue;
-			IBlockState state = world.getBlockState(iPos);
-			Block block = state.getBlock();
-			if (block instanceof ITileEntityProvider) {
-				TileEntity te = world.getTileEntity(iPos);
-				if (te == null) continue;
-				IItemHandler handler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-				if (handler == null || handler.getSlots() == 1) continue;
-				List<ItemStack> stacks = new ArrayList<>();
-				for (int i = 0; i < handler.getSlots(); i++) {
-					ItemStack stack = handler.getStackInSlot(i);
-					if (!stack.isEmpty() && stack.getCount() != stack.getMaxStackSize()) {
-						stacks.add(stack);
+
+		// find all the chests nearby
+		List<IInventory> chests = new ArrayList<>();
+		int itemCount = 0;
+
+		for (BlockPos iterPos : WorldUtil.getAllAround(pos, 16)) {
+
+			IInventory chestInventory = null, teInventory = null;
+
+			Block block = world.getBlockState(iterPos).getBlock();
+			if (block instanceof BlockChest) {
+				chestInventory = ((BlockChest) block).getContainer(world, iterPos, true);
+			}
+
+			TileEntity te = world.getTileEntity(iterPos);
+			if (te instanceof IInventory && !te.isInvalid()) {
+				teInventory = (IInventory) te;
+			}
+
+			// make sure we haven't counted this chest
+			if (chestInventory != null && teInventory != null && !checkIfChestsContains(chests, teInventory)) {
+
+				boolean empty = true;
+				// count items
+				for (int i = 0; i < chestInventory.getSizeInventory(); i++) {
+					if (!chestInventory.getStackInSlot(i).isEmpty()) {
+						empty = false;
+						itemCount++;
 					}
 				}
-				if (stacks.isEmpty() || stacks.size() == 1) continue;
-				boolean didAnything = false;
-				for (int i1 = 0; i1 < stacks.size(); i1++) {
-					ItemStack stack1 = stacks.get(i1);
-					for (int i2 = 0; i2 < stacks.size(); i2++) {
-						if (i1 != i2) {
-							ItemStack stack2 = stacks.get(i2);
-							if (this.areItemsStackable(stack1, stack2)) {
-								didAnything = true;
-								int toInsert = Math.min(stack1.getMaxStackSize() - stack1.getCount(), stack2.getCount());
-								stack1.grow(toInsert);
-								stack2.shrink(toInsert);
-							}
+
+				// only add non-empty chests
+				if (!empty) {
+					chests.add(chestInventory);
+				}
+			}
+		}
+
+		//TwilightForestMod.LOGGER.info("Found " + chests.size() + " non-empty chests, containing " + itemCount + " items");
+
+		// find a random item in one of the chests
+		ItemStack beingSorted = ItemStack.EMPTY;
+		int sortedChestNum = -1;
+		int sortedSlotNum = -1;
+
+		if (itemCount == 0) return;
+
+		int itemNumber = rand.nextInt(itemCount);
+		int currentNumber = 0;
+
+		for (int i = 0; i < chests.size(); i++) {
+			IInventory chest = chests.get(i);
+			for (int slotNum = 0; slotNum < chest.getSizeInventory(); slotNum++) {
+				ItemStack currentItem = chest.getStackInSlot(slotNum);
+
+				if (!currentItem.isEmpty()) {
+					if (currentNumber++ == itemNumber) {
+						beingSorted = currentItem;
+						sortedChestNum = i;
+						sortedSlotNum = slotNum;
+					}
+				}
+			}
+		}
+
+		//TwilightForestMod.LOGGER.info("Decided to sort item " + beingSorted);
+
+		if (beingSorted.isEmpty()) return;
+
+		int matchChestNum = -1;
+		int matchCount = 0;
+
+		// decide where to put it, if anywhere
+		for (int chestNum = 0; chestNum < chests.size(); chestNum++) {
+			IInventory chest = chests.get(chestNum);
+			int currentChestMatches = 0;
+
+			for (int slotNum = 0; slotNum < chest.getSizeInventory(); slotNum++) {
+
+				ItemStack currentItem = chest.getStackInSlot(slotNum);
+				if (!currentItem.isEmpty() && isSortingMatch(beingSorted, currentItem)) {
+					currentChestMatches += currentItem.getCount();
+				}
+			}
+
+			if (currentChestMatches > matchCount) {
+				matchCount = currentChestMatches;
+				matchChestNum = chestNum;
+			}
+		}
+
+		// soooo, did we find a better match?
+		if (matchChestNum >= 0 && matchChestNum != sortedChestNum) {
+			IInventory moveChest = chests.get(matchChestNum);
+			IInventory oldChest = chests.get(sortedChestNum);
+
+			// is there an empty inventory slot in the new chest?
+			int moveSlot = getEmptySlotIn(moveChest);
+
+			if (moveSlot >= 0) {
+				// remove old item
+				oldChest.setInventorySlotContents(sortedSlotNum, ItemStack.EMPTY);
+
+				// add new item
+				moveChest.setInventorySlotContents(moveSlot, beingSorted);
+
+				//TwilightForestMod.LOGGER.info("Moved sorted item " + beingSorted + " to chest " + matchChestNum + ", slot " + moveSlot);
+			}
+		}
+
+		// if the stack is not full, combine items from other stacks
+		if (beingSorted.getCount() < beingSorted.getMaxStackSize()) {
+			for (IInventory chest : chests) {
+				for (int slotNum = 0; slotNum < chest.getSizeInventory(); slotNum++) {
+					ItemStack currentItem = chest.getStackInSlot(slotNum);
+
+					if (!currentItem.isEmpty() && currentItem != beingSorted && beingSorted.isItemEqual(currentItem)) {
+						if (currentItem.getCount() <= (beingSorted.getMaxStackSize() - beingSorted.getCount())) {
+							chest.setInventorySlotContents(slotNum, ItemStack.EMPTY);
+							beingSorted.grow(currentItem.getCount());
+							currentItem.setCount(0);
 						}
 					}
-					if (didAnything) break;
 				}
 			}
 		}
 	}
 
-	private boolean areItemsStackable(ItemStack stack1, ItemStack stack2) {
-		if (!stack1.isStackable() || !stack2.isStackable()) return false;
-		if (stack1.getCount() == stack1.getMaxStackSize() || stack2.getCount() == stack2.getMaxStackSize()) return false;
-		return stack1.getItem() == stack2.getItem() && stack1.getMetadata() == stack2.getMetadata() && ((!stack1.hasTagCompound() && !stack2.hasTagCompound()) || (stack1.hasTagCompound() == stack2.hasTagCompound() && Objects.requireNonNull(stack1.getTagCompound()).equals(Objects.requireNonNull(stack2.getTagCompound()))));
+	private boolean isSortingMatch(ItemStack beingSorted, ItemStack currentItem) {
+		return beingSorted.getItem().getCreativeTab() == currentItem.getItem().getCreativeTab();
+	}
+
+	/**
+	 * Is the chest we're testing part of our chest list already?
+	 */
+	private boolean checkIfChestsContains(List<IInventory> chests, IInventory testChest) {
+		for (IInventory chest : chests) {
+			if (chest == testChest) {
+				return true;
+			}
+
+			if (chest instanceof InventoryLargeChest && ((InventoryLargeChest) chest).isPartOfLargeChest(testChest)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * @return an empty slot number in the chest, or -1 if the chest is full
+	 */
+	private int getEmptySlotIn(IInventory chest) {
+		for (int i = 0; i < chest.getSizeInventory(); i++) {
+			if (chest.getStackInSlot(i).isEmpty()) {
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 	@Override
