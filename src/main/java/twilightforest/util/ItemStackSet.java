@@ -2,17 +2,14 @@ package twilightforest.util;
 
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Objects;
 
 public abstract class ItemStackSet extends ObjectOpenCustomHashSet<ItemStack> implements ReloadableSet<ItemStack> {
 
-    private static final Hash.Strategy<ItemStack> ITEMSTACK_STRATEGY = new Hash.Strategy<ItemStack>() {
+    public static final Hash.Strategy<ItemStack> ITEMSTACK_STRATEGY = new Hash.Strategy<ItemStack>() {
         @Override
         public int hashCode(ItemStack o) {
             if (o == null || o.isEmpty()) return 0;

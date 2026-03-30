@@ -1,8 +1,6 @@
 package twilightforest.inventory;
 
-import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,39 +41,16 @@ public class ContainerTFUncrafting extends Container {
 
 	private static final String TAG_MARKER = "TwilightForestMarker";
 
-	private static final Hash.Strategy<ItemStack> ITEMSTACK_STRATEGY = new Hash.Strategy<ItemStack>() {
-		@Override
-		public int hashCode(ItemStack o) {
-			if (o == null || o.isEmpty()) return 0;
-			int i = Item.getIdFromItem(o.getItem()) << 17;
-			i |= (o.getMetadata() + 1) << 31;
-			if (o.hasTagCompound()) i |= Objects.hashCode(o.getTagCompound()) << 13;
-			return i;
-		}
-		@Override
-		public boolean equals(ItemStack a, ItemStack b) {
-			if (a == null || b == null) return false;
-			boolean nbt = !a.hasTagCompound() || Objects.requireNonNull(a.getTagCompound()).equals(Objects.requireNonNull(b.getTagCompound()));
-			return a.isItemEqual(b) && nbt;
-		}
-	};
-
 	private static final ItemStackSet STACK_CHECK = new ItemStackSet.Ore("uncraftingList");
 	private static final Set<ResourceLocation> RECIPE_CHECK = TFConfig.initializeUncraftingList();
 	private static final boolean IS_WHITELIST = TFConfig.whitelistUncrafting;
 
-	private static final Map<ItemStack, List<IRecipe>> ADDITIONAL_RECIPES = new Object2ObjectOpenCustomHashMap<>(ITEMSTACK_STRATEGY);
+	private static final Map<ItemStack, List<IRecipe>> ADDITIONAL_RECIPES = new Object2ObjectOpenCustomHashMap<>(ItemStackSet.ITEMSTACK_STRATEGY);
 
 	private static IRecipe currRecipe;
 
 	public static void reloadStackSet() {
 		STACK_CHECK.setReload();
-	}
-
-	private static Set<ItemStack> initStackSet() {
-		Set<ItemStack> set = new ObjectOpenCustomHashSet<>(ITEMSTACK_STRATEGY);
-        set.addAll(OreDictionary.getOres("uncraftingList"));
-		return set;
 	}
 
 	public static void addStackToList(ItemStack stack) {
