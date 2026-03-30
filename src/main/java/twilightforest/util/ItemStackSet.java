@@ -16,17 +16,14 @@ public abstract class ItemStackSet extends ObjectOpenCustomHashSet<ItemStack> im
         @Override
         public int hashCode(ItemStack o) {
             if (o == null || o.isEmpty()) return 0;
-            int i = Item.getIdFromItem(o.getItem()) << 17;
-            if (o.hasTagCompound()) i |= Objects.hashCode(o.getTagCompound()) << 13;
-            return i;
+            return 31 * o.getItem().hashCode();
         }
 
         @Override
         public boolean equals(ItemStack a, ItemStack b) {
-            if (a == null || b == null || a.isEmpty() || b.isEmpty()) return false;
-            boolean metadata = a.getMetadata() == b.getMetadata() || a.getMetadata() == OreDictionary.WILDCARD_VALUE || b.getMetadata() == OreDictionary.WILDCARD_VALUE;
-            boolean nbt = !a.hasTagCompound() || (b.hasTagCompound() && Objects.equals(a.getTagCompound(), b.getTagCompound()));
-            return a.getItem() == b.getItem() && metadata && nbt;
+            if (a == null || b == null) return false;
+            if (a.isEmpty() || b.isEmpty()) return false;
+            return a.getItem() == b.getItem() && (a.getMetadata() == b.getMetadata() || b.getMetadata() == OreDictionary.WILDCARD_VALUE);
         }
     };
 
