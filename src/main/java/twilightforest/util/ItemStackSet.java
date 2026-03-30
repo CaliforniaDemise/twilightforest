@@ -25,7 +25,7 @@ public abstract class ItemStackSet extends ObjectOpenCustomHashSet<ItemStack> im
         public boolean equals(ItemStack a, ItemStack b) {
             if (a == null || b == null || a.isEmpty() || b.isEmpty()) return false;
             boolean metadata = a.getMetadata() == b.getMetadata() || a.getMetadata() == OreDictionary.WILDCARD_VALUE || b.getMetadata() == OreDictionary.WILDCARD_VALUE;
-            boolean nbt = !a.hasTagCompound() || Objects.requireNonNull(a.getTagCompound()).equals(Objects.requireNonNull(b.getTagCompound()));
+            boolean nbt = !a.hasTagCompound() || (b.hasTagCompound() && Objects.equals(a.getTagCompound(), b.getTagCompound()));
             return a.getItem() == b.getItem() && metadata && nbt;
         }
     };
