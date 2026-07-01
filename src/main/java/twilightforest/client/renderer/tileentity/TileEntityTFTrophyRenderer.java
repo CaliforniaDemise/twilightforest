@@ -29,6 +29,7 @@ import twilightforest.client.model.entity.ModelTFNaga;
 import twilightforest.client.model.armor.ModelTFPhantomArmor;
 import twilightforest.client.model.entity.ModelTFQuestRam;
 import twilightforest.client.model.entity.ModelTFSnowQueen;
+import twilightforest.client.model.entity.ModelTFYetiAlphaTrophy;
 import twilightforest.client.model.entity.ModelTFTowerBoss;
 import twilightforest.tileentity.TileEntityTFTrophy;
 
@@ -52,6 +53,9 @@ public class TileEntityTFTrophyRenderer extends TileEntitySpecialRenderer<TileEn
 
 	private final ModelTFSnowQueen snowQueenModel = new ModelTFSnowQueen();
 	private static final ResourceLocation textureLocSnowQueen = TwilightForestMod.getModelTexture("snowqueen.png");
+
+	private final ModelTFYetiAlphaTrophy yetiAlphaModel = new ModelTFYetiAlphaTrophy();
+	private static final ResourceLocation textureLocYetiAlpha = TwilightForestMod.getModelTexture("yetialpha.png");
 
 	private final ModelTFMinoshroom minoshroomModel = new ModelTFMinoshroom();
 	private static final ResourceLocation textureLocMinoshroom = TwilightForestMod.getModelTexture("minoshroomtaur.png");
@@ -201,6 +205,9 @@ public class TileEntityTFTrophyRenderer extends TileEntitySpecialRenderer<TileEn
 			case KNIGHT_PHANTOM:
 				renderKnightPhantomHead(rotation, onGround);
 				break;
+			case YETI_ALPHA:
+				renderYetiAlphaHead(rotation, onGround);
+				break;
 			case QUEST_RAM:
 				renderQuestRamHead(rotation, onGround);
 				break;
@@ -326,6 +333,25 @@ public class TileEntityTFTrophyRenderer extends TileEntitySpecialRenderer<TileEn
 		snowQueenModel.bipedHead.render(0.0625F);
 		snowQueenModel.bipedHeadwear.render(0.0625F);
 	}
+
+	private void renderYetiAlphaHead(float rotation, boolean onGround) {
+		GlStateManager.translate(0, -0.3, 0);
+
+		GlStateManager.scale(0.2f, 0.2f, 0.2f);
+
+		this.bindTexture(textureLocYetiAlpha);
+
+		GlStateManager.scale(1f, -1f, -1f);
+
+		// we seem to be getting a 180 degree rotation here
+		GlStateManager.rotate(rotation, 0F, 1F, 0F);
+		GlStateManager.rotate(180F, 0F, 1F, 0F);
+
+		GlStateManager.translate(0, onGround ? 1.5F : 1.25F, onGround ? 0F : 0.24F);
+
+		yetiAlphaModel.bipedBody.render(0.0625F);
+	}
+
 
 	private void renderMinoshroomHead(float rotation, boolean onGround) {
 		GlStateManager.translate(0, 1, 0);

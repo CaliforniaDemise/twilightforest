@@ -1,7 +1,8 @@
 {
   "display": {
     "icon": {
-      "item": "twilightforest:alpha_fur"
+      "item": "twilightforest:trophy",
+      "data": 7
     },
     "title": {
       "translate": "advancement.twilightforest.progress_yeti"

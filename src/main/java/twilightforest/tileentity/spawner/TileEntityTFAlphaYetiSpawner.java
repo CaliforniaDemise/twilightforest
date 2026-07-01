@@ -8,7 +8,7 @@ import twilightforest.enums.BossVariant;
 public class TileEntityTFAlphaYetiSpawner extends TileEntityTFBossSpawner {
 
 	public TileEntityTFAlphaYetiSpawner() {
-		super(EntityList.getKey(EntityTFYetiAlpha.class), BossVariant.ALPHA_YETI);
+		super(EntityList.getKey(EntityTFYetiAlpha.class), BossVariant.YETI_ALPHA);
 	}
 
 	@Override

@@ -293,7 +293,7 @@ public class TFEventListener {
 			case QUEST_RAM: return TFFeature.QUEST_GROVE;
 			case FINAL_BOSS: return TFFeature.FINAL_CASTLE;
 			case MINOSHROOM: return TFFeature.LABYRINTH;
-			case ALPHA_YETI: return TFFeature.YETI_CAVE;
+			case YETI_ALPHA: return TFFeature.YETI_CAVE;
 			case SNOW_QUEEN: return TFFeature.ICE_TOWER;
 			case KNIGHT_PHANTOM: return TFFeature.KNIGHT_STRONGHOLD;
 			default: return null;

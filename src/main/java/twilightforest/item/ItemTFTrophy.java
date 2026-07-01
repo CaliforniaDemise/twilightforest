@@ -46,7 +46,8 @@ public class ItemTFTrophy extends ItemTF {
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
 		if (isInCreativeTab(tab)) {
 			for (BossVariant v : BossVariant.values()) {
-				if (v != BossVariant.ALPHA_YETI && v != BossVariant.FINAL_BOSS) {
+				//if (v != BossVariant.ALPHA_YETI 
+				if (v != BossVariant.FINAL_BOSS) {
 					list.add(new ItemStack(this, 1, v.ordinal()));
 				}
 			}
@@ -153,10 +154,10 @@ public class ItemTFTrophy extends ItemTF {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTFTrophyRenderer.DummyTile.class, tesr);
 
 		for (BossVariant variant : BossVariant.values()) {
-			if (variant != BossVariant.ALPHA_YETI) {
+			// if (variant != BossVariant.ALPHA_YETI) {
 				ModelLoader.setCustomModelResourceLocation(this, variant.ordinal(), itemModelLocation);
 				ForgeHooksClient.registerTESRItemStack(this, variant.ordinal(), TileEntityTFTrophyRenderer.DummyTile.class);
-			}
+			// }
 		}
 
 		ModelBakery.registerItemVariants(this,

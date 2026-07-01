@@ -24,6 +24,14 @@
         ]
       }]
     }, {
+      "name": "trophy",
+      "rolls": 1,
+      "entries": [{
+        "type": "item",
+        "name": "twilightforest:trophy",
+        "functions": [{ "function": "set_data", "data": 7 }]
+      }]
+    },  {
       "name": "shader",
       "rolls": 1,
       "conditions": [{ "condition": "twilightforest:mod_exists", "mod_id": "immersiveengineering" }],
