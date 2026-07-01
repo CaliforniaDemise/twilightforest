@@ -25,7 +25,7 @@ public enum BossVariant implements IStringSerializable {
 	KNIGHT_PHANTOM(TrophyType.IRON    , TileEntityTFKnightPhantomsSpawner::new),
 	SNOW_QUEEN    (TrophyType.GOLD    , TileEntityTFSnowQueenSpawner::new),
 	MINOSHROOM    (TrophyType.IRON    , TileEntityTFMinoshroomSpawner::new),
-	ALPHA_YETI    (TrophyType.IRON    , TileEntityTFAlphaYetiSpawner::new),
+	YETI_ALPHA    (TrophyType.IRON    , TileEntityTFAlphaYetiSpawner::new),
 	QUEST_RAM     (TrophyType.IRONWOOD, null),
 	FINAL_BOSS    (TrophyType.GOLD    , TileEntityTFFinalBossSpawner::new);
 

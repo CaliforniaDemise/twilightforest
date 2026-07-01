@@ -110,6 +110,10 @@ public class BlockTFTrophy extends BlockSkull implements ModelRegisterCallback, 
 					sound = SoundEvents.ENTITY_COW_AMBIENT;
 					volume = 0.5F;
 					break;
+				case YETI_ALPHA:
+					sound = TFSounds.ALPHAYETI_GROWL;
+					volume = 0.5F;
+					break;
 				case QUEST_RAM:
 					sound = SoundEvents.ENTITY_SHEEP_AMBIENT;
 					break;

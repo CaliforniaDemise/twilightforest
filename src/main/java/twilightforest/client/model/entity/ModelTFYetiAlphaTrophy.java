@@ -7,13 +7,13 @@ import net.minecraft.util.math.MathHelper;
 import twilightforest.entity.boss.EntityTFYetiAlpha;
 
 
-public class ModelTFYetiAlpha extends ModelBiped {
+public class ModelTFYetiAlphaTrophy extends ModelBiped {
 
 	public ModelRenderer mouth;
 	public ModelRenderer leftEye;
 	public ModelRenderer rightEye;
 
-	public ModelTFYetiAlpha() {
+	public ModelTFYetiAlphaTrophy() {
 		super();
 
 		this.textureWidth = 256;
@@ -26,7 +26,7 @@ public class ModelTFYetiAlpha extends ModelBiped {
 		this.bipedHeadwear.addBox(-4.0F, -8.0F, -4.0F, 0, 0, 0);
 
 		this.bipedBody = new ModelRenderer(this, 80, 0);
-		this.bipedBody.addBox(-24.0F, -60.0F, -18.0F, 48, 72, 36);
+		this.bipedBody.addBox(-24.0F, -60.0F, -18.0F, 48, 56, 36);
 		this.bipedBody.setRotationPoint(0.0F, -6.0F, 0.0F);
 
 		this.mouth = new ModelRenderer(this, 121, 50);
@@ -43,29 +43,6 @@ public class ModelTFYetiAlpha extends ModelBiped {
 		this.leftEye.addBox(-6.0F, -6.0F, -1.5F, 12, 12, 2);
 		this.leftEye.setRotationPoint(14.0F, -50.0F, -18.0F);
 		this.bipedBody.addChild(leftEye);
-
-		this.bipedRightArm = new ModelRenderer(this, 0, 0);
-		this.bipedRightArm.addBox(-15.0F, -6.0F, -8.0F, 16, 48, 16);
-		this.bipedRightArm.setRotationPoint(-25.0F, -26.0F, 0.0F);
-
-		this.bipedBody.addChild(this.bipedRightArm);
-
-		this.bipedLeftArm = new ModelRenderer(this, 0, 0);
-		this.bipedLeftArm.mirror = true;
-		this.bipedLeftArm.addBox(-1.0F, -6.0F, -8.0F, 16, 48, 16);
-		this.bipedLeftArm.setRotationPoint(25.0F, -26.0F, 0.0F);
-
-		this.bipedBody.addChild(this.bipedLeftArm);
-
-
-		this.bipedRightLeg = new ModelRenderer(this, 0, 66);
-		this.bipedRightLeg.addBox(-10.0F, 0.0F, -10.0F, 20, 20, 20);
-		this.bipedRightLeg.setRotationPoint(-13.5F, 4.0F, 0.0F);
-
-		this.bipedLeftLeg = new ModelRenderer(this, 0, 66);
-		this.bipedLeftLeg.mirror = true;
-		this.bipedLeftLeg.addBox(-10.0F, 0.0F, -10.0F, 20, 20, 20);
-		this.bipedLeftLeg.setRotationPoint(13.5F, 4.0F, 0.0F);
 
 		addPairHorns(-58.0F, 35F);
 		addPairHorns(-46.0F, 15F);
@@ -123,8 +100,6 @@ public class ModelTFYetiAlpha extends ModelBiped {
 		this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 
 		this.bipedBody.render(scale);
-		this.bipedRightLeg.render(scale);
-		this.bipedLeftLeg.render(scale);
 	}
 
 	/**

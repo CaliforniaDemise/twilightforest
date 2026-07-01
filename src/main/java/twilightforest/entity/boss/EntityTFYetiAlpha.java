@@ -108,7 +108,7 @@ public class EntityTFYetiAlpha extends EntityMob implements IRangedAttackMob, IH
 		super.entityInit();
 		dataManager.register(RAMPAGE_FLAG, (byte) 0);
 		dataManager.register(TIRED_FLAG, (byte) 0);
-		IBossCapability.initBoss(this, BossVariant.ALPHA_YETI);
+		IBossCapability.initBoss(this, BossVariant.YETI_ALPHA);
 	}
 
 	@Override
@@ -340,7 +340,7 @@ public class EntityTFYetiAlpha extends EntityMob implements IRangedAttackMob, IH
 	@Override
 	protected void despawnEntity() {
 		if (world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			if (hasHome()) world.setBlockState(getHomePosition(), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.ALPHA_YETI));
+			if (hasHome()) world.setBlockState(getHomePosition(), TFBlocks.boss_spawner.getDefaultState().withProperty(BlockTFBossSpawner.VARIANT, BossVariant.YETI_ALPHA));
 			this.setDead();
 		} else super.despawnEntity();
 	}
