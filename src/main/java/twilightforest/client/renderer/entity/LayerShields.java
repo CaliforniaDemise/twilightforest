@@ -43,7 +43,10 @@ public class LayerShields implements LayerRenderer<EntityLivingBase> {
 
         float prevX = OpenGlHelper.lastBrightnessX, prevY = OpenGlHelper.lastBrightnessY;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
-        GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, RenderHelper.setColorBuffer(1f, 1f, 1f, 1f));
+
+        // make shields ultrabright by changing emission
+        GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION);
+        GL11.glColor4f(1f, 1f, 1f, 1f);
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         int count = getShieldCount(entity);
@@ -65,7 +68,10 @@ public class LayerShields implements LayerRenderer<EntityLivingBase> {
             GlStateManager.popMatrix();
         }
 
-        GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, RenderHelper.setColorBuffer(0f, 0f, 0f, 1f));
+        // reset emission
+        GL11.glColor4f(0f, 0f, 0f, 1f);
+		GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT_AND_DIFFUSE);
+
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, prevX, prevY);
     }
 
